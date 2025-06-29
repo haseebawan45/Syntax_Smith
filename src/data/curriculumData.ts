@@ -762,6 +762,1997 @@ console.timeEnd('Memoized');`,
                 explanation: 'When the second parameter b is not provided, it becomes undefined. Adding a number to undefined results in NaN (Not a Number).'
               }
             ]
+          },
+          {
+            id: 'js-objects',
+            title: 'Objects & Object-Oriented Programming',
+            duration: 55,
+            content: `
+              <h2>Objects and OOP in JavaScript</h2>
+              <p>Objects are fundamental to JavaScript and form the basis of Object-Oriented Programming (OOP) in the language. Understanding objects and OOP principles is crucial for writing organized, maintainable code.</p>
+
+              <h3>Object Basics</h3>
+              <ul>
+                <li><strong>Object Literals</strong>: Creating objects using curly braces</li>
+                <li><strong>Properties and Methods</strong>: Storing data and behavior</li>
+                <li><strong>Property Access</strong>: Dot notation and bracket notation</li>
+                <li><strong>Object Methods</strong>: Object.keys(), Object.values(), Object.entries()</li>
+              </ul>
+
+              <h3>Object-Oriented Concepts</h3>
+              <ul>
+                <li><strong>Constructor Functions</strong>: Creating object templates</li>
+                <li><strong>Classes</strong>: ES6+ syntax for creating objects</li>
+                <li><strong>Inheritance</strong>: Extending classes and prototypes</li>
+                <li><strong>Encapsulation</strong>: Private and public members</li>
+              </ul>
+
+              <h3>Prototypes and Inheritance</h3>
+              <ul>
+                <li><strong>Prototype Chain</strong>: How JavaScript objects inherit properties</li>
+                <li><strong>Prototype Methods</strong>: Sharing methods between instances</li>
+                <li><strong>Object.create()</strong>: Creating objects with specific prototypes</li>
+              </ul>
+
+              <h3>Modern JavaScript Features</h3>
+              <ul>
+                <li><strong>Class Fields</strong>: Public and private fields</li>
+                <li><strong>Static Methods</strong>: Class-level functionality</li>
+                <li><strong>Getters and Setters</strong>: Controlling property access</li>
+                <li><strong>Object Destructuring</strong>: Extracting properties</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Object Literals and Basic Operations
+// Creating objects
+const person = {
+    name: "John",
+    age: 30,
+    greet() {
+        return \`Hello, my name is \${this.name}\`;
+    }
+};
+
+// Property access
+console.log(person.name);          // Dot notation
+console.log(person["age"]);        // Bracket notation
+
+// Adding and modifying properties
+person.location = "New York";
+person.age = 31;
+
+// Object methods
+console.log(Object.keys(person));   // ["name", "age", "location"]
+console.log(Object.values(person)); // ["John", 31, "New York"]
+
+// Object destructuring
+const { name, age } = person;
+console.log(name, age);
+
+// Computed property names
+const propertyName = "email";
+const user = {
+    [propertyName]: "john@example.com"
+};`,
+                explanation: 'Basic object operations including creation, property access, and built-in object methods.'
+              },
+              {
+                code: `// Classes and OOP
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    speak() {
+        return \`\${this.name} makes a sound\`;
+    }
+}
+
+class Dog extends Animal {
+    constructor(name, breed) {
+        super(name);
+        this.breed = breed;
+    }
+    
+    speak() {
+        return \`\${this.name} barks!\`;
+    }
+    
+    static createPuppy(name) {
+        return new Dog(name, "mixed");
+    }
+}
+
+// Using classes
+const dog = new Dog("Rex", "German Shepherd");
+console.log(dog.speak());        // "Rex barks!"
+console.log(dog instanceof Dog); // true
+
+// Private fields and methods (modern JavaScript)
+class BankAccount {
+    #balance = 0;  // Private field
+    
+    constructor(initialBalance) {
+        this.#balance = initialBalance;
+    }
+    
+    get balance() {
+        return this.#balance;
+    }
+    
+    deposit(amount) {
+        this.#balance += amount;
+    }
+}`,
+                explanation: 'Object-oriented programming in JavaScript using classes, inheritance, and modern features.'
+              },
+              {
+                code: `// Prototypes and Inheritance
+// Constructor function
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+// Adding methods to prototype
+Person.prototype.greet = function() {
+    return \`Hello, I'm \${this.name}\`;
+};
+
+// Creating instances
+const person1 = new Person("Alice", 25);
+const person2 = new Person("Bob", 30);
+
+// Both instances share the same greet method
+console.log(person1.greet === person2.greet); // true
+
+// Object.create()
+const personProto = {
+    introduce() {
+        return \`I'm \${this.name}\`;
+    }
+};
+
+const employee = Object.create(personProto);
+employee.name = "Charlie";
+employee.role = "Developer";
+
+// Getters and Setters
+const product = {
+    _price: 0,
+    
+    get price() {
+        return \`$\${this._price}\`;
+    },
+    
+    set price(value) {
+        if (value < 0) {
+            throw new Error("Price cannot be negative");
+        }
+        this._price = value;
+    }
+};
+
+product.price = 99.99;
+console.log(product.price); // "$99.99"`,
+                explanation: 'Prototypal inheritance, constructor functions, and property accessors in JavaScript.'
+              }
+            ],
+            exercise: 'Create a library management system using OOP principles. Implement classes for Book and Library that handle adding books, checking out books, and managing inventory.',
+            solution: `// Library Management System
+class Book {
+    constructor(title, author, isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.isCheckedOut = false;
+        this.checkedOutTo = null;
+        this.dueDate = null;
+    }
+
+    checkout(memberName) {
+        if (this.isCheckedOut) {
+            return \`Book "\${this.title}" is already checked out.\`;
+        }
+        
+        this.isCheckedOut = true;
+        this.checkedOutTo = memberName;
+        
+        // Set due date to 14 days from now
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 14);
+        this.dueDate = dueDate;
+        
+        return \`Book "\${this.title}" has been checked out to \${memberName}. Due: \${dueDate.toLocaleDateString()}\`;
+    }
+
+    return() {
+        if (!this.isCheckedOut) {
+            return \`Book "\${this.title}" is not checked out.\`;
+        }
+        
+        this.isCheckedOut = false;
+        this.checkedOutTo = null;
+        this.dueDate = null;
+        
+        return \`Book "\${this.title}" has been returned.\`;
+    }
+}
+
+class Library {
+    constructor(name) {
+        this.name = name;
+        this.books = new Map(); // Using Map to store books with ISBN as key
+    }
+
+    addBook(title, author, isbn) {
+        if (this.books.has(isbn)) {
+            return \`Book with ISBN \${isbn} already exists.\`;
+        }
+        
+        const book = new Book(title, author, isbn);
+        this.books.set(isbn, book);
+        return \`Added: \${title} by \${author}\`;
+    }
+
+    removeBook(isbn) {
+        if (!this.books.has(isbn)) {
+            return \`Book with ISBN \${isbn} not found.\`;
+        }
+        
+        const book = this.books.get(isbn);
+        if (book.isCheckedOut) {
+            return \`Cannot remove: book is currently checked out.\`;
+        }
+        
+        this.books.delete(isbn);
+        return \`Removed: \${book.title}\`;
+    }
+
+    findBook(isbn) {
+        return this.books.get(isbn) || null;
+    }
+
+    listBooks() {
+        const bookList = [];
+        for (const book of this.books.values()) {
+            bookList.push({
+                title: book.title,
+                author: book.author,
+                status: book.isCheckedOut ? \`Checked out to \${book.checkedOutTo}\` : "Available"
+            });
+        }
+        return bookList;
+    }
+}
+
+// Testing the library system
+const library = new Library("City Library");
+
+// Add some books
+console.log(library.addBook("The Great Gatsby", "F. Scott Fitzgerald", "978-0743273565"));
+console.log(library.addBook("1984", "George Orwell", "978-0451524935"));
+
+// Checkout a book
+const book = library.findBook("978-0743273565");
+console.log(book.checkout("John Smith"));
+
+// Try to remove checked out book
+console.log(library.removeBook("978-0743273565"));
+
+// List all books
+console.log("Library Inventory:");
+console.log(library.listBooks());
+
+// Return book
+console.log(book.return());
+
+// Remove book
+console.log(library.removeBook("978-0743273565"));`,
+            quizzes: [
+              {
+                id: 'js-obj-q1',
+                question: 'What is the main difference between a class and a constructor function in JavaScript?',
+                options: [
+                  'Classes are faster than constructor functions',
+                  'Constructor functions cannot create objects',
+                  'Classes provide a cleaner syntax and built-in inheritance',
+                  'Classes can have private fields, constructor functions cannot'
+                ],
+                correctAnswer: 'Classes provide a cleaner syntax and built-in inheritance',
+                explanation: 'While classes and constructor functions achieve similar results, classes provide a more modern, cleaner syntax and built-in features for inheritance through the extends keyword.'
+              },
+              {
+                id: 'js-obj-q2',
+                question: 'What will be the output of: const obj = { get x() { return 1; } }; obj.x = 2; console.log(obj.x);',
+                options: [
+                  '2',
+                  '1',
+                  'undefined',
+                  'Error'
+                ],
+                correctAnswer: '1',
+                explanation: 'When a property is defined with a getter but no setter, assignments to that property are ignored. The getter will always return its defined value (1 in this case).'
+              }
+            ]
+          },
+          {
+            id: 'js-arrays',
+            title: 'Arrays & Array Methods',
+            duration: 45,
+            content: `
+              <h2>Arrays in JavaScript</h2>
+              <p>Arrays are ordered collections of values and one of the most commonly used data structures in JavaScript. Understanding array methods is crucial for effective data manipulation.</p>
+
+              <h3>Array Basics</h3>
+              <ul>
+                <li><strong>Creating Arrays</strong>: Array literals and constructor</li>
+                <li><strong>Accessing Elements</strong>: Index-based access</li>
+                <li><strong>Array Properties</strong>: length, indices</li>
+                <li><strong>Multi-dimensional Arrays</strong>: Arrays of arrays</li>
+              </ul>
+
+              <h3>Array Methods</h3>
+              <ul>
+                <li><strong>Adding/Removing Elements</strong>: push(), pop(), shift(), unshift()</li>
+                <li><strong>Modifying Arrays</strong>: splice(), slice(), concat()</li>
+                <li><strong>Finding Elements</strong>: indexOf(), find(), includes()</li>
+                <li><strong>Transforming Arrays</strong>: map(), filter(), reduce()</li>
+              </ul>
+
+              <h3>Modern Array Features</h3>
+              <ul>
+                <li><strong>Spread Operator</strong>: [...array]</li>
+                <li><strong>Destructuring</strong>: [a, b] = array</li>
+                <li><strong>Array.from()</strong>: Creating arrays from array-like objects</li>
+                <li><strong>Array.isArray()</strong>: Type checking</li>
+              </ul>
+
+              <h3>Array Iteration</h3>
+              <ul>
+                <li><strong>forEach()</strong>: Simple iteration</li>
+                <li><strong>for...of</strong>: Modern iteration syntax</li>
+                <li><strong>entries()</strong>: Iterating with index</li>
+                <li><strong>some() and every()</strong>: Testing conditions</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Array Creation and Basic Operations
+// Creating arrays
+const numbers = [1, 2, 3, 4, 5];
+const fruits = new Array("apple", "banana", "orange");
+const mixed = [1, "text", { x: 10 }, [1, 2]];
+
+// Accessing elements
+console.log(numbers[0]);     // First element
+console.log(numbers[numbers.length - 1]); // Last element
+
+// Modifying arrays
+numbers.push(6);           // Add to end
+numbers.unshift(0);       // Add to beginning
+const lastNum = numbers.pop();    // Remove from end
+const firstNum = numbers.shift(); // Remove from beginning
+
+// Slicing and splicing
+const subset = numbers.slice(1, 3);    // Extract portion
+numbers.splice(1, 2, 10, 11);    // Remove and insert
+
+// Spread operator
+const numbersCopy = [...numbers];
+const combined = [...numbers, ...fruits];
+
+// Array destructuring
+const [first, second, ...rest] = numbers;
+console.log(first, second, rest);`,
+                explanation: 'Basic array operations including creation, modification, and modern JavaScript features.'
+              },
+              {
+                code: `// Array Methods for Data Transformation
+const data = [1, 2, 3, 4, 5];
+
+// map: Transform each element
+const doubled = data.map(num => num * 2);
+console.log(doubled); // [2, 4, 6, 8, 10]
+
+// filter: Select elements meeting criteria
+const evenNumbers = data.filter(num => num % 2 === 0);
+console.log(evenNumbers); // [2, 4]
+
+// reduce: Accumulate values
+const sum = data.reduce((acc, curr) => acc + curr, 0);
+console.log(sum); // 15
+
+// find and findIndex
+const found = data.find(num => num > 3);
+const foundIndex = data.findIndex(num => num > 3);
+
+// some and every
+const hasEven = data.some(num => num % 2 === 0);
+const allPositive = data.every(num => num > 0);
+
+// Chaining methods
+const result = data
+    .filter(num => num % 2 === 0)
+    .map(num => num * 2)
+    .reduce((acc, curr) => acc + curr, 0);`,
+                explanation: 'Array transformation methods and method chaining for data processing.'
+              },
+              {
+                code: `// Advanced Array Operations
+// Creating arrays from other objects
+const arrayFromString = Array.from("hello"); // ['h','e','l','l','o']
+const arrayFromSet = Array.from(new Set([1, 2, 2, 3])); // [1,2,3]
+
+// Creating arrays with specific conditions
+const range = Array.from({ length: 5 }, (_, i) => i + 1);
+console.log(range); // [1, 2, 3, 4, 5]
+
+// Multi-dimensional arrays
+const matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+];
+
+// Flattening arrays
+const nested = [1, [2, 3], [4, [5, 6]]];
+const flattened = nested.flat();     // One level
+const deepFlattened = nested.flat(Infinity); // All levels
+
+// Sorting arrays
+const numbers = [23, 5, 100, 56, 9, 1, 2, 6, 3];
+numbers.sort((a, b) => a - b); // Numeric sort
+
+const words = ['banana', 'apple', 'orange'];
+words.sort(); // Alphabetical sort
+
+// Finding unique values
+const unique = [...new Set([1, 2, 2, 3, 3, 4])];
+
+// Array to object conversion
+const pairs = [['name', 'John'], ['age', 30]];
+const object = Object.fromEntries(pairs);`,
+                explanation: 'Advanced array operations including multi-dimensional arrays, flattening, sorting, and conversions.'
+              }
+            ],
+            exercise: 'Create a data processing utility that takes an array of student records and provides methods for filtering, sorting, and analyzing the data. Include functions for calculating averages, finding top performers, and grouping students by grade levels.',
+            solution: `// Student Data Processing Utility
+class StudentAnalytics {
+    constructor(students) {
+        this.students = students;
+    }
+
+    // Get average grade for all students
+    getAverageGrade() {
+        if (this.students.length === 0) return 0;
+        
+        const totalGrade = this.students.reduce((sum, student) => 
+            sum + student.grade, 0);
+        return totalGrade / this.students.length;
+    }
+
+    // Get top N performers
+    getTopPerformers(n = 5) {
+        return [...this.students]
+            .sort((a, b) => b.grade - a.grade)
+            .slice(0, n);
+    }
+
+    // Group students by grade level
+    groupByGradeLevel() {
+        return this.students.reduce((groups, student) => {
+            const level = this.getGradeLevel(student.grade);
+            if (!groups[level]) {
+                groups[level] = [];
+            }
+            groups[level].push(student);
+            return groups;
+        }, {});
+    }
+
+    // Get grade level based on score
+    getGradeLevel(grade) {
+        if (grade >= 90) return 'A';
+        if (grade >= 80) return 'B';
+        if (grade >= 70) return 'C';
+        if (grade >= 60) return 'D';
+        return 'F';
+    }
+
+    // Filter students by minimum grade
+    filterByMinGrade(minGrade) {
+        return this.students.filter(student => 
+            student.grade >= minGrade);
+    }
+
+    // Sort students by various criteria
+    sortBy(criterion) {
+        return [...this.students].sort((a, b) => {
+            switch(criterion) {
+                case 'name':
+                    return a.name.localeCompare(b.name);
+                case 'grade':
+                    return b.grade - a.grade;
+                case 'id':
+                    return a.id - b.id;
+                default:
+                    return 0;
+            }
+        });
+    }
+
+    // Generate performance summary
+    generateSummary() {
+        const average = this.getAverageGrade();
+        const topThree = this.getTopPerformers(3);
+        const groups = this.groupByGradeLevel();
+        
+        return {
+            totalStudents: this.students.length,
+            averageGrade: average.toFixed(2),
+            topPerformers: topThree.map(s => ({
+                name: s.name,
+                grade: s.grade
+            })),
+            gradeDistribution: Object.entries(groups)
+                .map(([level, students]) => ({
+                    level,
+                    count: students.length,
+                    percentage: ((students.length / this.students.length) * 100).toFixed(1)
+                }))
+        };
+    }
+}
+
+// Test the utility
+const studentData = [
+    { id: 1, name: "Alice", grade: 95 },
+    { id: 2, name: "Bob", grade: 82 },
+    { id: 3, name: "Charlie", grade: 88 },
+    { id: 4, name: "David", grade: 75 },
+    { id: 5, name: "Eve", grade: 91 },
+    { id: 6, name: "Frank", grade: 68 },
+    { id: 7, name: "Grace", grade: 85 }
+];
+
+const analytics = new StudentAnalytics(studentData);
+
+// Test various operations
+console.log("Average Grade:", analytics.getAverageGrade());
+console.log("Top Performers:", analytics.getTopPerformers(3));
+console.log("Grouped by Grade Level:", analytics.groupByGradeLevel());
+console.log("Students Above 85:", analytics.filterByMinGrade(85));
+console.log("Sorted by Name:", analytics.sortBy('name'));
+console.log("Performance Summary:", analytics.generateSummary());`,
+            quizzes: [
+              {
+                id: 'js-arr-q1',
+                question: 'What is the difference between map() and forEach() methods?',
+                options: [
+                  'map() is faster than forEach()',
+                  'forEach() can modify the original array while map() cannot',
+                  'map() returns a new array while forEach() returns undefined',
+                  'forEach() can handle async operations while map() cannot'
+                ],
+                correctAnswer: 'map() returns a new array while forEach() returns undefined',
+                explanation: 'map() creates a new array with the results of calling a function for every array element, while forEach() just executes a function for each array element without creating a new array.'
+              },
+              {
+                id: 'js-arr-q2',
+                question: 'What will be the output of: [1,2,3].reduce((acc,curr) => acc + curr, 10)?',
+                options: [
+                  '6',
+                  '16',
+                  '10',
+                  'Error'
+                ],
+                correctAnswer: '16',
+                explanation: 'The reduce method starts with an initial value of 10 (second argument) and adds each array element to it: 10 + 1 + 2 + 3 = 16.'
+              }
+            ]
+          },
+          {
+            id: 'js-async',
+            title: 'Asynchronous Programming',
+            duration: 60,
+            content: `
+              <h2>Asynchronous Programming in JavaScript</h2>
+              <p>JavaScript is single-threaded but can handle asynchronous operations efficiently through various mechanisms. Understanding asynchronous programming is essential for handling I/O operations, API calls, and building responsive applications.</p>
+
+              <h3>Callbacks and Event Loop</h3>
+              <ul>
+                <li><strong>Callbacks</strong>: Functions passed as arguments</li>
+                <li><strong>Event Loop</strong>: How JavaScript handles async operations</li>
+                <li><strong>Call Stack</strong>: Execution context management</li>
+                <li><strong>Callback Hell</strong>: Nested callback problems</li>
+              </ul>
+
+              <h3>Promises</h3>
+              <ul>
+                <li><strong>Promise States</strong>: Pending, Fulfilled, Rejected</li>
+                <li><strong>Promise Methods</strong>: then(), catch(), finally()</li>
+                <li><strong>Promise Chaining</strong>: Sequential async operations</li>
+                <li><strong>Promise.all(), Promise.race()</strong>: Handling multiple promises</li>
+              </ul>
+
+              <h3>Async/Await</h3>
+              <ul>
+                <li><strong>async Functions</strong>: Always return promises</li>
+                <li><strong>await Operator</strong>: Pause execution until promise resolves</li>
+                <li><strong>Error Handling</strong>: try/catch with async/await</li>
+                <li><strong>Parallel Execution</strong>: Running async operations concurrently</li>
+              </ul>
+
+              <h3>Modern Async Patterns</h3>
+              <ul>
+                <li><strong>Top-level await</strong>: Using await outside async functions</li>
+                <li><strong>Async Iterators</strong>: for-await-of loops</li>
+                <li><strong>AbortController</strong>: Cancelling async operations</li>
+                <li><strong>Web Workers</strong>: True parallel execution</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Callbacks and Event Loop
+// Basic callback example
+function fetchData(callback) {
+    setTimeout(() => {
+        const data = { id: 1, name: "John" };
+        callback(null, data);
+    }, 1000);
+}
+
+fetchData((error, data) => {
+    if (error) {
+        console.error("Error:", error);
+    } else {
+        console.log("Data:", data);
+    }
+});
+
+// Callback hell example
+fetchUserData(userId, (error, user) => {
+    if (error) {
+        handleError(error);
+        return;
+    }
+    
+    fetchUserPosts(user.id, (error, posts) => {
+        if (error) {
+            handleError(error);
+            return;
+        }
+        
+        fetchPostComments(posts[0].id, (error, comments) => {
+            if (error) {
+                handleError(error);
+                return;
+            }
+            
+            console.log("User:", user);
+            console.log("First Post:", posts[0]);
+            console.log("Comments:", comments);
+        });
+    });
+});`,
+                explanation: 'Traditional callback patterns and the callback hell problem.'
+              },
+              {
+                code: `// Promises
+// Creating and using promises
+const fetchUser = (userId) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const user = { id: userId, name: "John" };
+            if (user) {
+                resolve(user);
+            } else {
+                reject(new Error("User not found"));
+            }
+        }, 1000);
+    });
+};
+
+// Promise chaining
+fetchUser(1)
+    .then(user => {
+        console.log("User:", user);
+        return fetchUserPosts(user.id);
+    })
+    .then(posts => {
+        console.log("Posts:", posts);
+        return fetchPostComments(posts[0].id);
+    })
+    .then(comments => {
+        console.log("Comments:", comments);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    })
+    .finally(() => {
+        console.log("Operation completed");
+    });
+
+// Handling multiple promises
+const userPromise = fetchUser(1);
+const postsPromise = fetchPosts();
+const settingsPromise = fetchSettings();
+
+// Wait for all promises to resolve
+Promise.all([userPromise, postsPromise, settingsPromise])
+    .then(([user, posts, settings]) => {
+        console.log("All data loaded:", { user, posts, settings });
+    })
+    .catch(error => {
+        console.error("One or more requests failed:", error);
+    });
+
+// Race between promises
+Promise.race([
+    fetchFastAPI(),
+    fetchSlowAPI()
+]).then(result => {
+    console.log("First API to respond:", result);
+});`,
+                explanation: 'Working with Promises, including creation, chaining, and handling multiple promises.'
+              },
+              {
+                code: `// Async/Await
+// Basic async/await usage
+async function getUserData(userId) {
+    try {
+        const user = await fetchUser(userId);
+        const posts = await fetchUserPosts(user.id);
+        const comments = await fetchPostComments(posts[0].id);
+        
+        return {
+            user,
+            posts,
+            comments
+        };
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+    }
+}
+
+// Parallel execution with async/await
+async function getMultipleUsers(userIds) {
+    try {
+        const userPromises = userIds.map(id => fetchUser(id));
+        const users = await Promise.all(userPromises);
+        return users;
+    } catch (error) {
+        console.error("Error fetching multiple users:", error);
+        throw error;
+    }
+}
+
+// Modern async patterns
+// Using AbortController
+const controller = new AbortController();
+const { signal } = controller;
+
+fetch('https://api.example.com/data', { signal })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => {
+        if (error.name === 'AbortError') {
+            console.log('Fetch aborted');
+        } else {
+            console.error('Error:', error);
+        }
+    });
+
+// Cancel the fetch after 5 seconds
+setTimeout(() => controller.abort(), 5000);
+
+// Async iteration
+async function* generateNumbers() {
+    for (let i = 0; i < 5; i++) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        yield i;
+    }
+}
+
+async function processNumbers() {
+    for await (const num of generateNumbers()) {
+        console.log(num);
+    }
+}`,
+                explanation: 'Modern asynchronous programming using async/await and advanced patterns.'
+              }
+            ],
+            exercise: 'Create a simple task scheduler that manages asynchronous tasks with priorities. Implement features for adding tasks, executing them in order, handling errors, and supporting task cancellation.',
+            solution: `// Task Scheduler with Priority Queue
+class Task {
+    constructor(name, priority, action) {
+        this.name = name;
+        this.priority = priority;
+        this.action = action;
+        this.status = 'pending';
+        this.controller = new AbortController();
+    }
+
+    async execute() {
+        try {
+            this.status = 'running';
+            const result = await this.action(this.controller.signal);
+            this.status = 'completed';
+            return result;
+        } catch (error) {
+            this.status = 'failed';
+            if (error.name === 'AbortError') {
+                throw new Error(\`Task "\${this.name}" was cancelled\`);
+            }
+            throw error;
+        }
+    }
+
+    cancel() {
+        this.controller.abort();
+        this.status = 'cancelled';
+    }
+}
+
+class TaskScheduler {
+    constructor() {
+        this.tasks = [];
+        this.running = false;
+    }
+
+    addTask(name, priority, action) {
+        const task = new Task(name, priority, action);
+        this.tasks.push(task);
+        // Sort tasks by priority (higher number = higher priority)
+        this.tasks.sort((a, b) => b.priority - a.priority);
+        return task;
+    }
+
+    async start() {
+        if (this.running) {
+            throw new Error('Scheduler is already running');
+        }
+
+        this.running = true;
+        
+        while (this.tasks.length > 0 && this.running) {
+            const task = this.tasks[0]; // Get highest priority task
+            
+            try {
+                console.log(\`Executing task: \${task.name}\`);
+                await task.execute();
+                console.log(\`Completed task: \${task.name}\`);
+            } catch (error) {
+                console.error(\`Task "\${task.name}" failed:, error.message\`);
+            } finally {
+                // Remove the task regardless of outcome
+                this.tasks.shift();
+            }
+        }
+
+        this.running = false;
+    }
+
+    stop() {
+        this.running = false;
+        // Cancel all pending tasks
+        this.tasks.forEach(task => task.cancel());
+    }
+
+    getStatus() {
+        return {
+            running: this.running,
+            pendingTasks: this.tasks.length,
+            tasks: this.tasks.map(task => ({
+                name: task.name,
+                priority: task.priority,
+                status: task.status
+            }))
+        };
+    }
+}
+
+// Example usage
+const scheduler = new TaskScheduler();
+
+// Add some example tasks
+scheduler.addTask('Send email', 2, async (signal) => {
+    await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+            resolve('Email sent');
+        }, 2000);
+
+        signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new Error('Task cancelled'));
+        });
+    });
+});
+
+scheduler.addTask('Process data', 3, async (signal) => {
+    await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+            resolve('Data processed');
+        }, 3000);
+
+        signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new Error('Task cancelled'));
+        });
+    });
+});
+
+scheduler.addTask('Backup database', 1, async (signal) => {
+    await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+            resolve('Backup completed');
+        }, 4000);
+
+        signal.addEventListener('abort', () => {
+            clearTimeout(timeout);
+            reject(new Error('Task cancelled'));
+        });
+    });
+});
+
+// Start the scheduler
+console.log('Starting scheduler...');
+scheduler.start().then(() => {
+    console.log('All tasks completed');
+    console.log('Final status:', scheduler.getStatus());
+});
+
+// Example: Cancel after 5 seconds
+setTimeout(() => {
+    console.log('Stopping scheduler...');
+    scheduler.stop();
+}, 5000);`,
+            quizzes: [
+              {
+                id: 'js-async-q1',
+                question: 'What is the main difference between Promises and async/await?',
+                options: [
+                  'Promises are faster than async/await',
+                  'async/await can only handle one promise at a time',
+                  'async/await provides cleaner syntax for handling promises',
+                  'Promises cannot handle errors'
+                ],
+                correctAnswer: 'async/await provides cleaner syntax for handling promises',
+                explanation: 'async/await is syntactic sugar over Promises, providing a more readable and synchronous-looking way to write asynchronous code. Under the hood, it still uses Promises.'
+              },
+              {
+                id: 'js-async-q2',
+                question: 'What will be the output of: Promise.all([Promise.resolve(1), Promise.reject("error"), Promise.resolve(3)])?',
+                options: [
+                  '[1, "error", 3]',
+                  'Error: "error"',
+                  '1',
+                  'undefined'
+                ],
+                correctAnswer: 'Error: "error"',
+                explanation: 'Promise.all() rejects immediately if any of the input promises reject, with the first rejection reason. It only resolves if all input promises resolve.'
+              }
+            ]
+          },
+          {
+            id: 'js-dom',
+            title: 'DOM Manipulation',
+            duration: 50,
+            content: `
+              <h2>DOM Manipulation in JavaScript</h2>
+              <p>The Document Object Model (DOM) is a programming interface for HTML documents. Understanding DOM manipulation is crucial for creating interactive web applications and dynamic user interfaces.</p>
+
+              <h3>DOM Basics</h3>
+              <ul>
+                <li><strong>DOM Tree</strong>: Document structure representation</li>
+                <li><strong>Node Types</strong>: Elements, text, comments</li>
+                <li><strong>Element Properties</strong>: innerHTML, textContent, value</li>
+                <li><strong>Element Attributes</strong>: getAttribute, setAttribute</li>
+              </ul>
+
+              <h3>Selecting Elements</h3>
+              <ul>
+                <li><strong>By ID</strong>: getElementById()</li>
+                <li><strong>By Class</strong>: getElementsByClassName()</li>
+                <li><strong>By Tag</strong>: getElementsByTagName()</li>
+                <li><strong>Query Selectors</strong>: querySelector(), querySelectorAll()</li>
+              </ul>
+
+              <h3>Modifying the DOM</h3>
+              <ul>
+                <li><strong>Creating Elements</strong>: createElement()</li>
+                <li><strong>Adding/Removing Elements</strong>: appendChild(), removeChild()</li>
+                <li><strong>Modifying Content</strong>: textContent, innerHTML</li>
+                <li><strong>Styling Elements</strong>: style property, classList</li>
+              </ul>
+
+              <h3>Event Handling</h3>
+              <ul>
+                <li><strong>Event Listeners</strong>: addEventListener(), removeEventListener()</li>
+                <li><strong>Event Types</strong>: click, submit, keydown, etc.</li>
+                <li><strong>Event Delegation</strong>: Handling events on parent elements</li>
+                <li><strong>Event Object</strong>: Properties and methods</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Selecting Elements
+// By ID
+const mainTitle = document.getElementById('main-title');
+console.log(mainTitle.textContent);
+
+// By class name
+const items = document.getElementsByClassName('item');
+Array.from(items).forEach(item => {
+    console.log(item.textContent);
+});
+
+// Query selector
+const firstButton = document.querySelector('button');
+const allButtons = document.querySelectorAll('.btn');
+
+// Traversing the DOM
+const parent = firstButton.parentElement;
+const nextSibling = firstButton.nextElementSibling;
+const children = parent.children;
+
+// Checking element properties
+console.log(firstButton.tagName);        // "BUTTON"
+console.log(firstButton.className);      // "btn"
+console.log(firstButton.id);             // "submit-btn"
+console.log(firstButton.getAttribute('data-id')); // Custom attribute`,
+                explanation: 'Different methods for selecting and traversing DOM elements.'
+              },
+              {
+                code: `// Modifying Elements
+// Creating and adding elements
+const newDiv = document.createElement('div');
+newDiv.className = 'container';
+newDiv.textContent = 'New Container';
+document.body.appendChild(newDiv);
+
+// Creating complex elements
+const card = document.createElement('div');
+card.innerHTML = \`
+    <div class="card">
+        <h2>Title</h2>
+        <p>Content goes here</p>
+        <button>Click me</button>
+    </div>
+\`;
+
+// Modifying styles
+const element = document.querySelector('.target');
+element.style.backgroundColor = '#f0f0f0';
+element.style.padding = '20px';
+element.style.border = '1px solid #ccc';
+
+// Working with classes
+element.classList.add('active');
+element.classList.remove('hidden');
+element.classList.toggle('selected');
+element.classList.replace('old-class', 'new-class');
+
+// Removing elements
+const oldElement = document.querySelector('.old');
+if (oldElement) {
+    oldElement.remove(); // Modern way
+    // Or traditional way:
+    // oldElement.parentElement.removeChild(oldElement);
+}`,
+                explanation: 'Creating, modifying, and removing DOM elements.'
+              },
+              {
+                code: `// Event Handling
+// Basic event listener
+const button = document.querySelector('#submit');
+button.addEventListener('click', (event) => {
+    event.preventDefault();
+    console.log('Button clicked!');
+});
+
+// Event object properties
+document.addEventListener('keydown', (event) => {
+    console.log(\`Key pressed: \${event.key}\`);
+    console.log(\`Ctrl key: \${event.ctrlKey}\`);
+    console.log(\`Shift key: \${event.shiftKey}\`);
+});
+
+// Event delegation
+document.querySelector('#list').addEventListener('click', (event) => {
+    if (event.target.matches('li')) {
+        console.log('List item clicked:', event.target.textContent);
+    }
+});
+
+// Custom events
+const customEvent = new CustomEvent('userAction', {
+    detail: {
+        username: 'John',
+        timestamp: new Date()
+    }
+});
+
+document.addEventListener('userAction', (event) => {
+    console.log('User action:', event.detail);
+});
+
+document.dispatchEvent(customEvent);
+
+// Form handling
+const form = document.querySelector('#myForm');
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+    
+    console.log('Form data:', data);
+});`,
+                explanation: 'Event handling and delegation in the DOM.'
+              }
+            ],
+            exercise: 'Create a dynamic todo list application that allows users to add, edit, complete, and delete tasks. Include features like task filtering, local storage persistence, and drag-and-drop reordering.',
+            solution: `// Todo List Application
+class TodoApp {
+    constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        this.todos = JSON.parse(localStorage.getItem('todos')) || [];
+        this.filter = 'all'; // all, active, completed
+        
+        this.init();
+    }
+    
+    init() {
+        // Create app structure
+        this.container.innerHTML = \`
+            <div class="todo-app">
+                <form id="todo-form">
+                    <input type="text" id="todo-input" placeholder="Add new task...">
+                    <button type="submit">Add</button>
+                </form>
+                
+                <div class="filters">
+                    <button data-filter="all" class="active">All</button>
+                    <button data-filter="active">Active</button>
+                    <button data-filter="completed">Completed</button>
+                </div>
+                
+                <ul id="todo-list"></ul>
+                
+                <div class="todo-stats">
+                    <span id="items-left">0 items left</span>
+                    <button id="clear-completed">Clear completed</button>
+                </div>
+            </div>
+        \`;
+        
+        // Add event listeners
+        this.bindEvents();
+        
+        // Initial render
+        this.render();
+    }
+    
+    bindEvents() {
+        // Form submission
+        const form = this.container.querySelector('#todo-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = form.querySelector('#todo-input');
+            const text = input.value.trim();
+            
+            if (text) {
+                this.addTodo(text);
+                input.value = '';
+            }
+        });
+        
+        // Filter clicks
+        const filters = this.container.querySelector('.filters');
+        filters.addEventListener('click', (e) => {
+            if (e.target.matches('button')) {
+                this.filter = e.target.dataset.filter;
+                
+                // Update active filter button
+                filters.querySelectorAll('button').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === this.filter);
+                });
+                
+                this.render();
+            }
+        });
+        
+        // Clear completed
+        this.container.querySelector('#clear-completed').addEventListener('click', () => {
+            this.todos = this.todos.filter(todo => !todo.completed);
+            this.save();
+            this.render();
+        });
+        
+        // Todo list events (delegation)
+        const todoList = this.container.querySelector('#todo-list');
+        todoList.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            
+            const todoId = parseInt(li.dataset.id);
+            
+            if (e.target.matches('.toggle')) {
+                this.toggleTodo(todoId);
+            } else if (e.target.matches('.delete')) {
+                this.deleteTodo(todoId);
+            }
+        });
+        
+        // Double click to edit
+        todoList.addEventListener('dblclick', (e) => {
+            const li = e.target.closest('li');
+            if (!li || !e.target.matches('.todo-text')) return;
+            
+            const todoId = parseInt(li.dataset.id);
+            this.editTodo(todoId, li);
+        });
+        
+        // Drag and drop
+        todoList.addEventListener('dragstart', (e) => {
+            if (e.target.matches('li')) {
+                e.target.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', e.target.dataset.id);
+            }
+        });
+        
+        todoList.addEventListener('dragend', (e) => {
+            if (e.target.matches('li')) {
+                e.target.classList.remove('dragging');
+            }
+        });
+        
+        todoList.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggable = this.container.querySelector('.dragging');
+            if (!draggable) return;
+            
+            const afterElement = this.getDragAfterElement(todoList, e.clientY);
+            if (afterElement) {
+                todoList.insertBefore(draggable, afterElement);
+            } else {
+                todoList.appendChild(draggable);
+            }
+        });
+        
+        todoList.addEventListener('drop', (e) => {
+            e.preventDefault();
+            this.updateTodoOrder();
+        });
+    }
+    
+    getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('li:not(.dragging)')];
+        
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            
+            if (offset < 0 && offset > closest.offset) {
+                return { offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+    
+    addTodo(text) {
+        const todo = {
+            id: Date.now(),
+            text,
+            completed: false
+        };
+        
+        this.todos.push(todo);
+        this.save();
+        this.render();
+    }
+    
+    toggleTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.completed = !todo.completed;
+            this.save();
+            this.render();
+        }
+    }
+    
+    deleteTodo(id) {
+        this.todos = this.todos.filter(t => t.id !== id);
+        this.save();
+        this.render();
+    }
+    
+    editTodo(id, li) {
+        const todo = this.todos.find(t => t.id === id);
+        if (!todo) return;
+        
+        const textSpan = li.querySelector('.todo-text');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = todo.text;
+        input.className = 'edit-input';
+        
+        const finishEdit = () => {
+            const newText = input.value.trim();
+            if (newText) {
+                todo.text = newText;
+                this.save();
+                this.render();
+            }
+        };
+        
+        input.addEventListener('blur', finishEdit);
+        input.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                finishEdit();
+            } else if (e.key === 'Escape') {
+                this.render();
+            }
+        });
+        
+        li.replaceChild(input, textSpan);
+        input.focus();
+    }
+    
+    updateTodoOrder() {
+        const newOrder = Array.from(this.container.querySelectorAll('#todo-list li'))
+            .map(li => parseInt(li.dataset.id));
+            
+        this.todos = newOrder.map(id => this.todos.find(t => t.id === id));
+        this.save();
+    }
+    
+    save() {
+        localStorage.setItem('todos', JSON.stringify(this.todos));
+    }
+    
+    render() {
+        const todoList = this.container.querySelector('#todo-list');
+        const itemsLeft = this.container.querySelector('#items-left');
+        
+        // Filter todos
+        const filteredTodos = this.todos.filter(todo => {
+            if (this.filter === 'active') return !todo.completed;
+            if (this.filter === 'completed') return todo.completed;
+            return true;
+        });
+        
+        // Render todos
+        todoList.innerHTML = filteredTodos.map(todo => \`
+            <li data-id="\${todo.id}" draggable="true" class="\${todo.completed ? 'completed' : ''}">
+                <input type="checkbox" class="toggle" \${todo.completed ? 'checked' : ''}>
+                <span class="todo-text">\${todo.text}</span>
+                <button class="delete">×</button>
+            </li>
+        \`).join('');
+        
+        // Update items left
+        const activeCount = this.todos.filter(t => !t.completed).length;
+        itemsLeft.textContent = \`\${activeCount} item\${activeCount !== 1 ? 's' : ''} left\`;
+    }
+}
+
+// Initialize the app
+const todoApp = new TodoApp('todo-container');
+
+// Add some CSS styles
+const styles = \`
+    .todo-app {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    #todo-form {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    
+    #todo-input {
+        flex: 1;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+    
+    button {
+        padding: 8px 16px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background: #45a049;
+    }
+    
+    .filters {
+        margin-bottom: 20px;
+    }
+    
+    .filters button {
+        background: #f0f0f0;
+        color: #333;
+        margin-right: 10px;
+    }
+    
+    .filters button.active {
+        background: #4CAF50;
+        color: white;
+    }
+    
+    #todo-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    #todo-list li {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background: #fff;
+        border: 1px solid #ddd;
+        margin-bottom: 5px;
+        border-radius: 4px;
+    }
+    
+    #todo-list li.completed .todo-text {
+        text-decoration: line-through;
+        color: #888;
+    }
+    
+    .toggle {
+        margin-right: 10px;
+    }
+    
+    .todo-text {
+        flex: 1;
+        margin: 0 10px;
+    }
+    
+    .delete {
+        background: #ff4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        padding: 0;
+    }
+    
+    .delete:hover {
+        background: #cc0000;
+    }
+    
+    .todo-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+    }
+    
+    .dragging {
+        opacity: 0.5;
+    }
+    
+    .edit-input {
+        flex: 1;
+        margin: 0 10px;
+        padding: 5px;
+        font-size: 16px;
+        border: 1px solid #4CAF50;
+        border-radius: 4px;
+    }
+\`;
+
+const styleSheet = document.createElement('style');
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);`,
+            quizzes: [
+              {
+                id: 'js-dom-q1',
+                question: 'What is the difference between textContent and innerHTML?',
+                options: [
+                  'textContent is faster than innerHTML',
+                  'innerHTML can parse HTML strings while textContent treats everything as text',
+                  'textContent only works with modern browsers',
+                  'innerHTML is more secure than textContent'
+                ],
+                correctAnswer: 'innerHTML can parse HTML strings while textContent treats everything as text',
+                explanation: 'textContent gets/sets the text content of an element, treating everything as plain text, while innerHTML can parse and render HTML strings, which can be both powerful and potentially dangerous if not properly sanitized.'
+              },
+              {
+                id: 'js-dom-q2',
+                question: 'Which method is more efficient for adding multiple elements to the DOM?',
+                options: [
+                  'Using multiple appendChild() calls',
+                  'Using innerHTML',
+                  'Using insertBefore()',
+                  'Using DocumentFragment'
+                ],
+                correctAnswer: 'Using DocumentFragment',
+                explanation: 'DocumentFragment is a lightweight container that can hold multiple elements and be inserted into the DOM with a single operation, minimizing reflows and repaints.'
+              }
+            ]
+          },
+          {
+            id: 'js-errors',
+            title: 'Error Handling & Debugging',
+            duration: 45,
+            content: `
+              <h2>Error Handling and Debugging in JavaScript</h2>
+              <p>Understanding how to handle errors and debug code effectively is essential for developing reliable JavaScript applications. This lesson covers error handling mechanisms, debugging techniques, and best practices for writing maintainable code.</p>
+
+              <h3>Types of Errors</h3>
+              <ul>
+                <li><strong>Syntax Errors</strong>: Invalid JavaScript code</li>
+                <li><strong>Runtime Errors</strong>: Errors that occur during execution</li>
+                <li><strong>Logical Errors</strong>: Code runs but produces incorrect results</li>
+                <li><strong>Type Errors</strong>: Operations on incompatible types</li>
+              </ul>
+
+              <h3>Error Handling</h3>
+              <ul>
+                <li><strong>try...catch</strong>: Basic error handling</li>
+                <li><strong>throw</strong>: Custom error creation</li>
+                <li><strong>Error Objects</strong>: Built-in error types</li>
+                <li><strong>finally</strong>: Cleanup operations</li>
+              </ul>
+
+              <h3>Debugging Techniques</h3>
+              <ul>
+                <li><strong>Console Methods</strong>: log, error, warn, info</li>
+                <li><strong>Debugger Statement</strong>: Browser debugging</li>
+                <li><strong>Source Maps</strong>: Debugging compiled code</li>
+                <li><strong>Performance Tools</strong>: Profiling and optimization</li>
+              </ul>
+
+              <h3>Error Prevention</h3>
+              <ul>
+                <li><strong>Input Validation</strong>: Checking data before processing</li>
+                <li><strong>Type Checking</strong>: Ensuring correct data types</li>
+                <li><strong>Defensive Programming</strong>: Anticipating errors</li>
+                <li><strong>Error Boundaries</strong>: Containing component errors</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Basic Error Handling
+// try...catch block
+try {
+    const result = someUndefinedFunction();
+    console.log(result);
+} catch (error) {
+    console.error('An error occurred:', error.message);
+    // Log to error tracking service
+    logError(error);
+} finally {
+    // Cleanup code
+    console.log('Execution completed');
+}
+
+// Custom Error Types
+class ValidationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'ValidationError';
+        this.code = 'INVALID_INPUT';
+    }
+}
+
+// Using custom errors
+function validateUser(user) {
+    if (!user.name) {
+        throw new ValidationError('Name is required');
+    }
+    if (!user.email) {
+        throw new ValidationError('Email is required');
+    }
+    if (!user.email.includes('@')) {
+        throw new ValidationError('Invalid email format');
+    }
+}
+
+// Error handling with async/await
+async function fetchUserData(userId) {
+    try {
+        const response = await fetch(\`/api/users/\${userId}\`);
+        if (!response.ok) {
+            throw new Error(\`HTTP error! status: \${response.status}\`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        if (error instanceof TypeError) {
+            console.error('Network error:', error);
+        } else {
+            console.error('Other error:', error);
+        }
+        throw error; // Re-throw to handle at higher level
+    }
+}`,
+                explanation: 'Basic error handling patterns including try...catch blocks and custom error types.'
+              },
+              {
+                code: `// Debugging Techniques
+// Console methods
+console.log('Regular message');
+console.info('Information message');
+console.warn('Warning message');
+console.error('Error message');
+
+// Complex object logging
+const user = { name: 'John', age: 30, roles: ['admin', 'user'] };
+console.log('User object:', user);
+console.table(user); // Tabular format
+console.dir(user, { depth: null }); // Full object inspection
+
+// Performance measurement
+console.time('operation');
+for (let i = 0; i < 1000000; i++) {
+    // Some operation
+}
+console.timeEnd('operation');
+
+// Stack trace logging
+function functionC() {
+    console.trace('Trace from functionC');
+}
+
+function functionB() {
+    functionC();
+}
+
+function functionA() {
+    functionB();
+}
+
+functionA();
+
+// Conditional debugging
+let debugMode = true;
+function debug(...args) {
+    if (debugMode) {
+        console.log(...args);
+    }
+}
+
+// Using debugger statement
+function complexCalculation(data) {
+    debugger; // Browser will pause here when dev tools are open
+    let result = 0;
+    for (let item of data) {
+        result += processItem(item);
+    }
+    return result;
+}`,
+                explanation: 'Various debugging techniques including console methods and debugger statements.'
+              },
+              {
+                code: `// Error Prevention and Defensive Programming
+// Type checking
+function processValue(value) {
+    // Type checking
+    if (typeof value !== 'number') {
+        throw new TypeError('Value must be a number');
+    }
+    
+    // Range validation
+    if (value < 0 || value > 100) {
+        throw new RangeError('Value must be between 0 and 100');
+    }
+    
+    return value * 2;
+}
+
+// Null checking with optional chaining
+function getUserCity(user) {
+    return user?.address?.city ?? 'Unknown';
+}
+
+// Default values with destructuring
+function processConfig(config) {
+    const {
+        timeout = 1000,
+        retries = 3,
+        baseUrl = 'http://localhost'
+    } = config || {};
+    
+    return { timeout, retries, baseUrl };
+}
+
+// Input validation utility
+const validator = {
+    isString(value) {
+        return typeof value === 'string';
+    },
+    
+    isNumber(value) {
+        return typeof value === 'number' && !isNaN(value);
+    },
+    
+    isEmail(value) {
+        return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
+    },
+    
+    isPhone(value) {
+        return /^\\+?[1-9]\\d{1,14}$/.test(value);
+    }
+};
+
+// Using the validator
+function createUser(userData) {
+    const errors = [];
+    
+    if (!validator.isString(userData.name)) {
+        errors.push('Name must be a string');
+    }
+    
+    if (!validator.isEmail(userData.email)) {
+        errors.push('Invalid email format');
+    }
+    
+    if (userData.phone && !validator.isPhone(userData.phone)) {
+        errors.push('Invalid phone number format');
+    }
+    
+    if (errors.length > 0) {
+        throw new ValidationError(errors.join(', '));
+    }
+    
+    return {
+        id: generateId(),
+        ...userData,
+        createdAt: new Date()
+    };
+}`,
+                explanation: 'Error prevention techniques including type checking, input validation, and defensive programming.'
+              }
+            ],
+            exercise: 'Create a robust form validation library that handles different types of inputs (text, email, phone, etc.), provides detailed error messages, and includes both synchronous and asynchronous validation capabilities.',
+            solution: `// Form Validation Library
+class ValidationError extends Error {
+    constructor(message, field) {
+        super(message);
+        this.name = 'ValidationError';
+        this.field = field;
+    }
+}
+
+class FormValidator {
+    constructor() {
+        this.rules = new Map();
+        this.asyncRules = new Map();
+        this.errors = new Map();
+    }
+    
+    // Add validation rule
+    addRule(field, rules) {
+        this.rules.set(field, rules);
+    }
+    
+    // Add async validation rule
+    addAsyncRule(field, rule) {
+        this.asyncRules.set(field, rule);
+    }
+    
+    // Validate single value
+    validateValue(value, rules) {
+        for (const rule of rules) {
+            switch (rule.type) {
+                case 'required':
+                    if (!value || value.trim() === '') {
+                        throw new ValidationError('This field is required', rule.field);
+                    }
+                    break;
+                    
+                case 'email':
+                    if (value && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value)) {
+                        throw new ValidationError('Invalid email format', rule.field);
+                    }
+                    break;
+                    
+                case 'phone':
+                    if (value && !/^\\+?[1-9]\\d{1,14}$/.test(value)) {
+                        throw new ValidationError('Invalid phone number', rule.field);
+                    }
+                    break;
+                    
+                case 'minLength':
+                    if (value && value.length < rule.value) {
+                        throw new ValidationError(
+                            \`Minimum length is \${rule.value} characters\`,
+                            rule.field
+                        );
+                    }
+                    break;
+                    
+                case 'maxLength':
+                    if (value && value.length > rule.value) {
+                        throw new ValidationError(
+                            \`Maximum length is \${rule.value} characters\`,
+                            rule.field
+                        );
+                    }
+                    break;
+                    
+                case 'pattern':
+                    if (value && !rule.value.test(value)) {
+                        throw new ValidationError(
+                            rule.message || 'Invalid format',
+                            rule.field
+                        );
+                    }
+                    break;
+                    
+                case 'custom':
+                    try {
+                        rule.validate(value);
+                    } catch (error) {
+                        throw new ValidationError(error.message, rule.field);
+                    }
+                    break;
+            }
+        }
+    }
+    
+    // Validate form data
+    async validate(formData) {
+        this.errors.clear();
+        const validationPromises = [];
+        
+        // Synchronous validation
+        for (const [field, rules] of this.rules) {
+            try {
+                this.validateValue(formData[field], rules);
+            } catch (error) {
+                if (error instanceof ValidationError) {
+                    this.errors.set(error.field, error.message);
+                } else {
+                    throw error; // Re-throw unexpected errors
+                }
+            }
+        }
+        
+        // Asynchronous validation
+        for (const [field, rule] of this.asyncRules) {
+            const promise = rule(formData[field])
+                .catch(error => {
+                    this.errors.set(field, error.message);
+                });
+            validationPromises.push(promise);
+        }
+        
+        // Wait for all async validations
+        await Promise.all(validationPromises);
+        
+        return {
+            isValid: this.errors.size === 0,
+            errors: Object.fromEntries(this.errors)
+        };
+    }
+}
+
+// Example usage
+const validator = new FormValidator();
+
+// Add validation rules
+validator.addRule('username', [
+    { type: 'required', field: 'username' },
+    { type: 'minLength', value: 3, field: 'username' },
+    { type: 'maxLength', value: 20, field: 'username' },
+    {
+        type: 'pattern',
+        value: /^[a-zA-Z0-9_]+$/,
+        message: 'Username can only contain letters, numbers and underscore',
+        field: 'username'
+    }
+]);
+
+validator.addRule('email', [
+    { type: 'required', field: 'email' },
+    { type: 'email', field: 'email' }
+]);
+
+validator.addRule('phone', [
+    { type: 'phone', field: 'phone' }
+]);
+
+validator.addRule('password', [
+    { type: 'required', field: 'password' },
+    { type: 'minLength', value: 8, field: 'password' },
+    {
+        type: 'custom',
+        field: 'password',
+        validate: (value) => {
+            if (!/[A-Z]/.test(value)) {
+                throw new Error('Password must contain at least one uppercase letter');
+            }
+            if (!/[a-z]/.test(value)) {
+                throw new Error('Password must contain at least one lowercase letter');
+            }
+            if (!/[0-9]/.test(value)) {
+                throw new Error('Password must contain at least one number');
+            }
+        }
+    }
+]);
+
+// Add async validation (e.g., checking if username is available)
+validator.addAsyncRule('username', async (username) => {
+    const response = await fetch(\`/api/check-username?username=\${username}\`);
+    const data = await response.json();
+    
+    if (!data.available) {
+        throw new Error('Username is already taken');
+    }
+});
+
+// Example form data
+const formData = {
+    username: 'john_doe',
+    email: 'john@example.com',
+    phone: '+1234567890',
+    password: 'Password123'
+};
+
+// Validate form
+validator.validate(formData)
+    .then(result => {
+        if (result.isValid) {
+            console.log('Form is valid');
+        } else {
+            console.log('Validation errors:', result.errors);
+        }
+    })
+    .catch(error => {
+        console.error('Validation failed:', error);
+    });`,
+            quizzes: [
+              {
+                id: 'js-errors-q1',
+                question: 'What is the difference between throw and try...catch?',
+                options: [
+                  'throw is used to handle errors while try...catch creates errors',
+                  'throw creates an error while try...catch handles errors',
+                  'throw only works with built-in errors while try...catch works with custom errors',
+                  'There is no difference'
+                ],
+                correctAnswer: 'throw creates an error while try...catch handles errors',
+                explanation: 'throw is used to create and raise an error, while try...catch is a mechanism to handle errors that occur within the try block.'
+              },
+              {
+                id: 'js-errors-q2',
+                question: 'Which console method is best for debugging performance issues?',
+                options: [
+                  'console.log()',
+                  'console.error()',
+                  'console.time()/timeEnd()',
+                  'console.trace()'
+                ],
+                correctAnswer: 'console.time()/timeEnd()',
+                explanation: 'console.time() and console.timeEnd() are specifically designed to measure the duration between two points in code execution, making them ideal for performance debugging.'
+              }
+            ]
           }
         ]
       }
@@ -1276,103 +3267,78 @@ int parsedInt = Integer.parseInt(numberStr);`,
             codeExamples: [
               {
                 code: `// Conditional statements
-int age = 18;
-String status;
+age = 18
+status = "adult" if age >= 18 else "minor"
 
-// if-else statement
-if (age < 13) {
-    status = "Child";
-} else if (age < 18) {
-    status = "Teenager";
-} else {
-    status = "Adult";
-}
+if age < 13:
+    print("Child")
+elif age < 18:
+    print("Teenager")
+elif age < 65:
+    print("Adult")
+else:
+    print("Senior")
 
-// Ternary operator
-boolean canVote = age >= 18 ? true : false;
-
-// Switch statement
-int dayOfWeek = 3;
-String day;
-switch (dayOfWeek) {
-    case 1:
-        day = "Monday";
-        break;
-    case 2:
-        day = "Tuesday";
-        break;
-    case 3:
-        day = "Wednesday";
-        break;
-    default:
-        day = "Other day";
-}`,
-                explanation: 'Different ways to implement conditional logic in Java.'
+// Match case (Python 3.10+)
+command = "help"
+match command:
+    case "start":
+        print("Starting...")
+    case "stop":
+        print("Stopping...")
+    case "help":
+        print("Showing help...")
+    case _:
+        print("Unknown command")`,
+                explanation: 'Different ways to implement conditional logic in Python.'
               },
               {
-                code: `// Loop examples
-// Basic for loop
-for (int i = 0; i < 5; i++) {
-    System.out.println("Count: " + i);
-}
+                code: `// For loops
+// Using range
+for i in range(5):
+    print(i)  # 0, 1, 2, 3, 4
 
-// Enhanced for loop (for-each)
-int[] numbers = {1, 2, 3, 4, 5};
-for (int number : numbers) {
-    System.out.println("Number: " + number);
-}
+// Iterating over a list
+colors = ["red", "green", "blue"]
+for color in colors:
+    print(color)
 
-// While loop
-int count = 0;
-while (count < 3) {
-    System.out.println("While count: " + count);
-    count++;
-}
+// Enumerate for index and value
+for index, color in enumerate(colors):
+    print(f"{index}: {color}")
 
-// Do-while loop
-int x = 0;
-do {
-    System.out.println("Do-while x: " + x);
-    x++;
-} while (x < 3);`,
-                explanation: 'Different types of loops in Java.'
+// Dictionary iteration
+person = {"name": "John", "age": 30}
+for key, value in person.items():
+    print(f"{key}: {value}")`,
+                explanation: 'Different types of for loops in Python.'
               },
               {
-                code: `// Control flow statements
-// Break and continue
-for (int i = 0; i < 10; i++) {
-    if (i == 3) {
-        continue; // Skip iteration
-    }
-    if (i == 7) {
-        break;    // Exit loop
-    }
-    System.out.println("Value: " + i);
-}
+                code: `// While loops and control statements
+count = 0
+while count < 5:
+    if count == 2:
+        count += 1
+        continue  # Skip the rest of this iteration
+    print(count)
+    count += 1
 
-// Nested loops
-for (int i = 1; i <= 3; i++) {
-    for (int j = 1; j <= 3; j++) {
-        if (i == j) {
-            System.out.print("* ");
-        } else {
-            System.out.print(". ");
-        }
-    }
-    System.out.println();
-}
+# Loop with else
+for num in range(1, 4):
+    if num == 5:
+        break
+else:
+    print("Loop completed without break")
 
-// Loop with labels
-outer:
-for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-        if (i * j > 2) {
-            break outer;
-        }
-        System.out.println(i + "," + j);
-    }
-}`,
-                explanation: 'Control flow statements and nested loops in Java.'
+# Nested loops
+for i in range(3):
+    for j in range(3):
+        if i == j:
+            print("*", end=" ")
+        else:
+            print(".", end=" ")
+    print()`,
+                explanation: 'While loops, loop control statements, and nested loops in Python.'
               }
             ],
             exercise: 'Create a prime number checker that takes a number and determines if it is prime. Use appropriate control flow statements and handle edge cases.',
@@ -1418,12 +3384,17 @@ for (int i = 0; i < 3; i++) {
                 question: 'Which loop is guaranteed to execute at least once?',
                 options: ['for loop', 'while loop', 'do-while loop', 'for-each loop'],
                 correctAnswer: 'do-while loop',
-                explanation: 'A do-while loop always executes its block at least once before checking the condition.'
+                explanation: 'A do-while loop always executes its code block at least once before checking the condition.'
               },
               {
                 id: 'java-flow-q2',
-                question: 'What will be printed? for(int i=0; i<5; i++) { if(i==2) continue; System.out.print(i);}',
-                options: ['01234', '0134', '1234', '0123'],
+                question: 'What will be the output of: for(int i=0; i<5; i++) { if(i==2) continue; System.out.print(i);}',
+                options: [
+                  '01234',
+                  '0134',
+                  '1234',
+                  '0123'
+                ],
                 correctAnswer: '0134',
                 explanation: 'The continue statement skips iteration when i=2, so 2 is not printed.'
               }
