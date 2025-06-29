@@ -3127,6 +3127,614 @@ unsubscribe();`,
                 explanation: 'When destructuring objects, you can provide default values that will be used when the property doesn\'t exist in the source object. Here, b gets the default value of 2 since it\'s not present in obj.'
               }
             ]
+          },
+          {
+            id: 'js-api-integration',
+            title: 'API Integration and Fetch API',
+            duration: 60,
+            content: `
+              <h2>API Integration and Fetch API</h2>
+              <p>Modern web applications heavily rely on APIs for data exchange. This lesson covers how to integrate APIs using JavaScript's native Fetch API and handle various types of HTTP requests and responses.</p>
+
+              <h3>Understanding APIs</h3>
+              <ul>
+                <li><strong>REST APIs</strong>: Principles and concepts</li>
+                <li><strong>HTTP Methods</strong>: GET, POST, PUT, DELETE, PATCH</li>
+                <li><strong>Request Headers</strong>: Content types and authentication</li>
+                <li><strong>Response Status Codes</strong>: Success, client errors, server errors</li>
+              </ul>
+
+              <h3>Fetch API Basics</h3>
+              <ul>
+                <li><strong>Making Requests</strong>: Basic syntax and options</li>
+                <li><strong>Handling Responses</strong>: JSON and other formats</li>
+                <li><strong>Error Handling</strong>: Network errors and HTTP errors</li>
+                <li><strong>Request Configuration</strong>: Headers, body, mode</li>
+              </ul>
+
+              <h3>Advanced API Integration</h3>
+              <ul>
+                <li><strong>Authentication</strong>: Bearer tokens and API keys</li>
+                <li><strong>Request Interceptors</strong>: Modifying requests</li>
+                <li><strong>Response Interceptors</strong>: Processing responses</li>
+                <li><strong>Rate Limiting</strong>: Managing API calls</li>
+              </ul>
+
+              <h3>Best Practices</h3>
+              <ul>
+                <li><strong>Error Handling</strong>: Graceful error management</li>
+                <li><strong>Security</strong>: CORS and data validation</li>
+                <li><strong>Performance</strong>: Caching and optimization</li>
+                <li><strong>Testing</strong>: Mocking API calls</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Basic Fetch API Usage
+// GET Request
+async function fetchUserData(userId) {
+    try {
+        const response = await fetch(\`https://api.example.com/users/\${userId}\`);
+        
+        if (!response.ok) {
+            throw new Error(\`HTTP error! status: \${response.status}\`);
+        }
+        
+        const userData = await response.json();
+        return userData;
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw error;
+    }
+}
+
+// POST Request
+async function createUser(userData) {
+    try {
+        const response = await fetch('https://api.example.com/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer your-token-here'
+            },
+            body: JSON.stringify(userData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(\`HTTP error! status: \${response.status}\`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error creating user:', error);
+        throw error;
+    }
+}
+
+// Using the functions
+async function handleUserOperations() {
+    try {
+        // Fetch existing user
+        const user = await fetchUserData(123);
+        console.log('Fetched user:', user);
+        
+        // Create new user
+        const newUser = await createUser({
+            name: 'John Doe',
+            email: 'john@example.com'
+        });
+        console.log('Created user:', newUser);
+    } catch (error) {
+        console.error('Operation failed:', error);
+    }
+}`,
+                explanation: 'Basic examples of making GET and POST requests using the Fetch API with proper error handling.'
+              },
+              {
+                code: `// Advanced API Integration
+class APIClient {
+    constructor(baseURL, options = {}) {
+        this.baseURL = baseURL;
+        this.options = {
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        };
+        this.requestInterceptors = [];
+        this.responseInterceptors = [];
+    }
+
+    // Add request interceptor
+    addRequestInterceptor(interceptor) {
+        this.requestInterceptors.push(interceptor);
+    }
+
+    // Add response interceptor
+    addResponseInterceptor(interceptor) {
+        this.responseInterceptors.push(interceptor);
+    }
+
+    // Process request through interceptors
+    async processRequest(config) {
+        let finalConfig = { ...config };
+        for (const interceptor of this.requestInterceptors) {
+            finalConfig = await interceptor(finalConfig);
+        }
+        return finalConfig;
+    }
+
+    // Process response through interceptors
+    async processResponse(response) {
+        let finalResponse = response;
+        for (const interceptor of this.responseInterceptors) {
+            finalResponse = await interceptor(finalResponse);
+        }
+        return finalResponse;
+    }
+
+    // Make HTTP request
+    async request(endpoint, config = {}) {
+        const finalConfig = await this.processRequest({
+            ...this.options,
+            ...config,
+            headers: {
+                ...this.options.headers,
+                ...config.headers
+            }
+        });
+
+        try {
+            const response = await fetch(\`\${this.baseURL}\${endpoint}\`, finalConfig);
+            const processedResponse = await this.processResponse(response);
+
+            if (!processedResponse.ok) {
+                throw new Error(\`HTTP error! status: \${processedResponse.status}\`);
+            }
+
+            return await processedResponse.json();
+        } catch (error) {
+            console.error('API request failed:', error);
+            throw error;
+        }
+    }
+
+    // Convenience methods
+    async get(endpoint, config = {}) {
+        return this.request(endpoint, { ...config, method: 'GET' });
+    }
+
+    async post(endpoint, data, config = {}) {
+        return this.request(endpoint, {
+            ...config,
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async put(endpoint, data, config = {}) {
+        return this.request(endpoint, {
+            ...config,
+            method: 'PUT',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async delete(endpoint, config = {}) {
+        return this.request(endpoint, { ...config, method: 'DELETE' });
+    }
+}
+
+// Usage example
+const api = new APIClient('https://api.example.com');
+
+// Add authentication interceptor
+api.addRequestInterceptor(async (config) => {
+    const token = localStorage.getItem('auth_token');
+    return {
+        ...config,
+        headers: {
+            ...config.headers,
+            'Authorization': \`Bearer \${token}\`
+        }
+    };
+});
+
+// Add response logging interceptor
+api.addResponseInterceptor(async (response) => {
+    console.log(\`API Response: \${response.status}\`);
+    return response;
+});
+
+// Using the API client
+async function fetchUserProfile(userId) {
+    try {
+        const user = await api.get(\`/users/\${userId}\`);
+        console.log('User profile:', user);
+        return user;
+    } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+        throw error;
+    }
+}`,
+                explanation: 'Advanced API client implementation with interceptors, error handling, and convenience methods.'
+              },
+              {
+                code: `// API Rate Limiting and Caching
+class RateLimitedAPI {
+    constructor(maxRequestsPerMinute) {
+        this.maxRequestsPerMinute = maxRequestsPerMinute;
+        this.requestQueue = [];
+        this.requestTimes = [];
+        this.cache = new Map();
+        this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+    }
+
+    // Check if request is within rate limit
+    canMakeRequest() {
+        const now = Date.now();
+        this.requestTimes = this.requestTimes.filter(
+            time => now - time < 60000
+        );
+        return this.requestTimes.length < this.maxRequestsPerMinute;
+    }
+
+    // Add request to queue
+    async enqueueRequest(key, requestFn) {
+        return new Promise((resolve, reject) => {
+            this.requestQueue.push({
+                key,
+                requestFn,
+                resolve,
+                reject
+            });
+            this.processQueue();
+        });
+    }
+
+    // Process request queue
+    async processQueue() {
+        if (this.requestQueue.length === 0) return;
+
+        if (this.canMakeRequest()) {
+            const { key, requestFn, resolve, reject } = this.requestQueue.shift();
+            this.requestTimes.push(Date.now());
+
+            try {
+                // Check cache first
+                const cachedResult = this.getCachedResult(key);
+                if (cachedResult) {
+                    resolve(cachedResult);
+                    return;
+                }
+
+                const result = await requestFn();
+                this.cacheResult(key, result);
+                resolve(result);
+            } catch (error) {
+                reject(error);
+            }
+
+            // Process next request
+            setTimeout(() => this.processQueue(), 0);
+        } else {
+            // Wait and try again
+            setTimeout(() => this.processQueue(), 1000);
+        }
+    }
+
+    // Cache management
+    getCachedResult(key) {
+        const cached = this.cache.get(key);
+        if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+            return cached.data;
+        }
+        return null;
+    }
+
+    cacheResult(key, data) {
+        this.cache.set(key, {
+            data,
+            timestamp: Date.now()
+        });
+    }
+
+    // Make API request with rate limiting and caching
+    async request(key, requestFn) {
+        return this.enqueueRequest(key, requestFn);
+    }
+}
+
+// Usage example
+const api = new RateLimitedAPI(30); // 30 requests per minute
+
+async function fetchUserData(userId) {
+    return api.request(
+        \`user_\${userId}\`,
+        async () => {
+            const response = await fetch(
+                \`https://api.example.com/users/\${userId}\`
+            );
+            if (!response.ok) {
+                throw new Error(\`HTTP error! status: \${response.status}\`);
+            }
+            return response.json();
+        }
+    );
+}
+
+// Example usage with multiple requests
+async function fetchMultipleUsers() {
+    try {
+        const userIds = [1, 2, 3, 4, 5];
+        const promises = userIds.map(id => fetchUserData(id));
+        const users = await Promise.all(promises);
+        console.log('Fetched users:', users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    }
+}`,
+                explanation: 'Implementation of rate limiting and caching for API requests to manage API quotas and improve performance.'
+              }
+            ],
+            exercise: 'Create a weather dashboard application that integrates with a weather API. The application should fetch weather data, handle errors gracefully, implement caching to minimize API calls, and include rate limiting. Use the concepts learned in this lesson to create a robust API integration.',
+            solution: `// Weather Dashboard Application
+class WeatherAPI {
+    constructor(apiKey) {
+        this.baseURL = 'https://api.weatherapi.com/v1';
+        this.apiKey = apiKey;
+        this.cache = new Map();
+        this.cacheTimeout = 30 * 60 * 1000; // 30 minutes
+        this.requestCount = 0;
+        this.requestReset = Date.now();
+        this.maxRequests = 30; // 30 requests per minute
+    }
+
+    async checkRateLimit() {
+        const now = Date.now();
+        if (now - this.requestReset >= 60000) {
+            this.requestCount = 0;
+            this.requestReset = now;
+        }
+        
+        if (this.requestCount >= this.maxRequests) {
+            throw new Error('Rate limit exceeded. Please try again later.');
+        }
+        
+        this.requestCount++;
+    }
+
+    getCacheKey(endpoint, params) {
+        return \`\${endpoint}?\${new URLSearchParams(params).toString()}\`;
+    }
+
+    getCachedData(key) {
+        const cached = this.cache.get(key);
+        if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+            return cached.data;
+        }
+        return null;
+    }
+
+    setCachedData(key, data) {
+        this.cache.set(key, {
+            data,
+            timestamp: Date.now()
+        });
+    }
+
+    async fetchWeatherData(location) {
+        const endpoint = '/current.json';
+        const params = {
+            key: this.apiKey,
+            q: location,
+            aqi: 'yes' // Include air quality data
+        };
+
+        const cacheKey = this.getCacheKey(endpoint, params);
+        const cachedData = this.getCachedData(cacheKey);
+        
+        if (cachedData) {
+            return cachedData;
+        }
+
+        await this.checkRateLimit();
+
+        try {
+            const response = await fetch(
+                \`\${this.baseURL}\${endpoint}?\${new URLSearchParams(params)}\`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(\`Weather API error: \${response.status}\`);
+            }
+
+            const data = await response.json();
+            this.setCachedData(cacheKey, data);
+            return data;
+        } catch (error) {
+            console.error('Error fetching weather data:', error);
+            throw error;
+        }
+    }
+
+    async getForecast(location, days = 3) {
+        const endpoint = '/forecast.json';
+        const params = {
+            key: this.apiKey,
+            q: location,
+            days: days,
+            aqi: 'yes'
+        };
+
+        const cacheKey = this.getCacheKey(endpoint, params);
+        const cachedData = this.getCachedData(cacheKey);
+        
+        if (cachedData) {
+            return cachedData;
+        }
+
+        await this.checkRateLimit();
+
+        try {
+            const response = await fetch(
+                \`\${this.baseURL}\${endpoint}?\${new URLSearchParams(params)}\`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(\`Weather API error: \${response.status}\`);
+            }
+
+            const data = await response.json();
+            this.setCachedData(cacheKey, data);
+            return data;
+        } catch (error) {
+            console.error('Error fetching forecast data:', error);
+            throw error;
+        }
+    }
+}
+
+class WeatherDashboard {
+    constructor(apiKey) {
+        this.weatherAPI = new WeatherAPI(apiKey);
+        this.locations = new Set();
+    }
+
+    createWeatherCard(weatherData) {
+        const card = document.createElement('div');
+        card.className = 'weather-card';
+        
+        const location = weatherData.location;
+        const current = weatherData.current;
+        
+        card.innerHTML = \`
+            <h2>\${location.name}, \${location.country}</h2>
+            <div class="weather-info">
+                <div class="temperature">
+                    <span class="value">\${current.temp_c}°C</span>
+                    <span class="feels-like">Feels like \${current.feelslike_c}°C</span>
+                </div>
+                <div class="conditions">
+                    <img src="\${current.condition.icon}" alt="\${current.condition.text}">
+                    <span>\${current.condition.text}</span>
+                </div>
+                <div class="details">
+                    <div>Humidity: \${current.humidity}%</div>
+                    <div>Wind: \${current.wind_kph} km/h</div>
+                    <div>Precipitation: \${current.precip_mm} mm</div>
+                </div>
+            </div>
+        \`;
+        
+        return card;
+    }
+
+    async addLocation(location) {
+        try {
+            const weatherData = await this.weatherAPI.fetchWeatherData(location);
+            const weatherCard = this.createWeatherCard(weatherData);
+            
+            const dashboard = document.getElementById('weather-dashboard');
+            dashboard.appendChild(weatherCard);
+            
+            this.locations.add(location);
+        } catch (error) {
+            console.error(\`Error adding location \${location}:\`, error);
+            throw error;
+        }
+    }
+
+    async updateDashboard() {
+        try {
+            const dashboard = document.getElementById('weather-dashboard');
+            dashboard.innerHTML = ''; // Clear existing cards
+            
+            const updatePromises = Array.from(this.locations).map(async location => {
+                const weatherData = await this.weatherAPI.fetchWeatherData(location);
+                const weatherCard = this.createWeatherCard(weatherData);
+                dashboard.appendChild(weatherCard);
+            });
+            
+            await Promise.all(updatePromises);
+        } catch (error) {
+            console.error('Error updating dashboard:', error);
+            throw error;
+        }
+    }
+
+    startAutoUpdate(interval = 300000) { // 5 minutes
+        setInterval(() => this.updateDashboard(), interval);
+    }
+}
+
+// Usage example
+document.addEventListener('DOMContentLoaded', async () => {
+    const apiKey = 'your-api-key-here';
+    const dashboard = new WeatherDashboard(apiKey);
+    
+    // Add search functionality
+    const searchForm = document.getElementById('location-search');
+    searchForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const locationInput = document.getElementById('location-input');
+        const location = locationInput.value.trim();
+        
+        if (location) {
+            try {
+                await dashboard.addLocation(location);
+                locationInput.value = '';
+            } catch (error) {
+                alert(\`Error adding location: \${error.message}\`);
+            }
+        }
+    });
+    
+    // Add initial locations
+    try {
+        await dashboard.addLocation('London');
+        await dashboard.addLocation('New York');
+        dashboard.startAutoUpdate();
+    } catch (error) {
+        console.error('Error setting up dashboard:', error);
+    }
+});`,
+            quizzes: [
+              {
+                id: 'js-api-q1',
+                question: 'What is the main advantage of using the Fetch API over XMLHttpRequest?',
+                options: [
+                  'Fetch is faster than XMLHttpRequest',
+                  'Fetch uses Promises and provides a more modern interface',
+                  'Fetch automatically handles all errors',
+                  'Fetch supports more HTTP methods'
+                ],
+                correctAnswer: 'Fetch uses Promises and provides a more modern interface',
+                explanation: 'The Fetch API provides a more modern and flexible interface based on Promises, making it easier to handle asynchronous operations and chain multiple operations together compared to the older XMLHttpRequest.'
+              },
+              {
+                id: 'js-api-q2',
+                question: 'When does the Fetch API\'s Promise reject?',
+                options: [
+                  'When the server returns any error status code',
+                  'When there is a network error or the request cannot be made',
+                  'When the response is not in JSON format',
+                  'When the server takes too long to respond'
+                ],
+                correctAnswer: 'When there is a network error or the request cannot be made',
+                explanation: 'The Fetch API\'s Promise only rejects when there is a network error or the request cannot be made. HTTP error status codes (4xx, 5xx) do not cause the Promise to reject - these need to be handled by checking the response.ok property.'
+              }
+            ]
           }
         ]
       }
