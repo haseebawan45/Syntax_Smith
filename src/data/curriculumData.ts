@@ -3735,6 +3735,138 @@ document.addEventListener('DOMContentLoaded', async () => {
                 explanation: 'The Fetch API\'s Promise only rejects when there is a network error or the request cannot be made. HTTP error status codes (4xx, 5xx) do not cause the Promise to reject - these need to be handled by checking the response.ok property.'
               }
             ]
+          },
+          {
+            id: 'js-modules-packages',
+            title: 'JavaScript Modules and Package Management',
+            duration: 45,
+            content: `
+              <h2>JavaScript Modules and Package Management</h2>
+              <p>Learn how to organize your JavaScript code using modules and manage dependencies effectively with npm/yarn. This lesson covers modern module systems and best practices for package management.</p>
+
+              <h3>ES Modules (ESM)</h3>
+              <ul>
+                <li><strong>Import/Export Syntax</strong>: Named exports, default exports, and import variations</li>
+                <li><strong>Module Scope</strong>: Understanding module-level encapsulation</li>
+                <li><strong>Dynamic Imports</strong>: Code-splitting and lazy loading</li>
+                <li><strong>Top-level await</strong>: Using await in modules</li>
+              </ul>
+
+              <h3>Package Management</h3>
+              <ul>
+                <li><strong>NPM Basics</strong>: package.json, dependencies vs devDependencies</li>
+                <li><strong>Semantic Versioning</strong>: Understanding version numbers and ranges</li>
+                <li><strong>Lock Files</strong>: package-lock.json and yarn.lock</li>
+                <li><strong>Scripts</strong>: NPM scripts for automation</li>
+              </ul>
+
+              <h3>Best Practices</h3>
+              <ul>
+                <li><strong>Dependency Management</strong>: Keeping dependencies up to date and secure</li>
+                <li><strong>Module Organization</strong>: Project structure and import conventions</li>
+                <li><strong>Tree Shaking</strong>: Optimizing bundle size</li>
+                <li><strong>Monorepos</strong>: Managing multiple packages</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Named exports
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+
+// Default export
+export default class Calculator {
+  add(a, b) { return a + b; }
+  subtract(a, b) { return a - b; }
+}
+
+// Importing
+import Calculator, { add, subtract } from './math.js';`,
+                explanation: 'Example of named exports and default export in ES modules.'
+              },
+              {
+                code: `{
+  "name": "my-project",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.2.0",    // Accept minor updates
+    "lodash": "~4.17.21",  // Accept only patch updates
+    "express": "4.18.2"    // Exact version
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build": "webpack",
+    "test": "jest"
+  }
+}`,
+                explanation: 'Example of a package.json file with different version constraints and npm scripts.'
+              }
+            ],
+            exercise: 'Create a simple module that exports utility functions for working with arrays (map, filter, reduce) and a default export class ArrayUtils. Then create a main file that imports and uses these utilities.',
+            solution: `// arrayUtils.js
+export const map = (arr, fn) => arr.map(fn);
+export const filter = (arr, fn) => arr.filter(fn);
+export const reduce = (arr, fn, initial) => arr.reduce(fn, initial);
+
+export default class ArrayUtils {
+  constructor(array) {
+    this.array = array;
+  }
+
+  map(fn) {
+    return new ArrayUtils(this.array.map(fn));
+  }
+
+  filter(fn) {
+    return new ArrayUtils(this.array.filter(fn));
+  }
+
+  reduce(fn, initial) {
+    return this.array.reduce(fn, initial);
+  }
+}
+
+// main.js
+import ArrayUtils, { map, filter, reduce } from './arrayUtils.js';
+
+// Using named exports
+const numbers = [1, 2, 3, 4, 5];
+const doubled = map(numbers, n => n * 2);
+const evens = filter(numbers, n => n % 2 === 0);
+const sum = reduce(numbers, (acc, n) => acc + n, 0);
+
+// Using default export
+const utils = new ArrayUtils(numbers);
+const result = utils
+  .map(n => n * 2)
+  .filter(n => n > 5)
+  .reduce((acc, n) => acc + n, 0);`,
+            quizzes: [
+              {
+                id: 'js-modules-q1',
+                question: 'What is the difference between named exports and default exports in ES modules?',
+                options: [
+                  'Named exports allow multiple exports while default exports allow only one per module',
+                  'There is no difference between them',
+                  'Default exports are faster than named exports',
+                  'Named exports can only export functions'
+                ],
+                correctAnswer: 'Named exports allow multiple exports while default exports allow only one per module',
+                explanation: 'A module can have multiple named exports using the export keyword, but can only have one default export using export default. Named exports must be imported using their exact names (or aliases), while default exports can be imported with any name.'
+              },
+              {
+                id: 'js-modules-q2',
+                question: 'What does the ~ prefix mean in a package.json dependency version?',
+                options: [
+                  'Accepts patch-level changes',
+                  'Accepts minor version changes',
+                  'Accepts major version changes',
+                  'Only accepts exact version'
+                ],
+                correctAnswer: 'Accepts patch-level changes',
+                explanation: 'The tilde (~) prefix in package.json allows patch-level changes. For example, ~1.2.3 will accept versions from 1.2.3 to 1.2.9, but not 1.3.0.'
+              }
+            ]
           }
         ]
       }
