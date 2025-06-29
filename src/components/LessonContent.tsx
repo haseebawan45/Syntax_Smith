@@ -32,24 +32,28 @@ export default function LessonContent({ lesson }: LessonContentProps) {
 
       {/* Code examples */}
       <div className="space-y-8">
-        <h2 className="text-2xl font-semibold mb-4">Code Examples</h2>
+        <h2 className="text-2xl font-semibold mb-6">Code Examples</h2>
         {lesson.codeExamples.map((example, index) => (
-          <div key={index} className="space-y-4">
+          <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
             <CodeBlock 
               code={example.code}
               language={getLanguage(lesson.id)}
             />
-            <p className="text-gray-600 italic">{example.explanation}</p>
+            <div className="p-4 bg-gray-50 border-t border-gray-100">
+              <p className="text-gray-700">{example.explanation}</p>
+            </div>
           </div>
         ))}
       </div>
 
       {/* Practice exercise */}
       <div className="mt-12">
-        <h2 className="text-2xl font-semibold mb-4">Practice Exercise</h2>
+        <h2 className="text-2xl font-semibold mb-6">Practice Exercise</h2>
         <p className="mb-6">{lesson.exercise}</p>
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h3 className="text-xl font-semibold mb-4">Solution</h3>
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="p-4 border-b border-gray-100">
+            <h3 className="text-xl font-semibold">Solution</h3>
+          </div>
           <CodeBlock 
             code={lesson.solution}
             language={getLanguage(lesson.id)}
