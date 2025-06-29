@@ -28,7 +28,7 @@ const curriculumData: Course[] = [
                 <li>Versatile: front-end, back-end, mobile, and desktop development</li>
                 <li>Active community and extensive resources</li>
               </ul>
-
+              
               <h3>JavaScript Environment Setup</h3>
               <p>To start coding in JavaScript, you need:</p>
               <ul>
@@ -36,7 +36,7 @@ const curriculumData: Course[] = [
                 <li>A code editor (VS Code recommended)</li>
                 <li>Basic understanding of HTML and CSS</li>
               </ul>
-
+              
               <h3>Running JavaScript Code</h3>
               <p>There are several ways to run JavaScript code:</p>
               <ul>
@@ -356,14 +356,14 @@ typeDemo(undefined);   // undefined`,
             content: `
               <h2>Control Flow in JavaScript</h2>
               <p>Control flow determines how your program executes statements in a particular sequence. JavaScript provides several structures to control program flow.</p>
-
+              
               <h3>Conditional Statements</h3>
               <ul>
                 <li><strong>if...else</strong>: Make decisions based on conditions</li>
                 <li><strong>switch</strong>: Handle multiple conditions with different cases</li>
                 <li><strong>ternary operator</strong>: Shorthand for simple if...else conditions</li>
               </ul>
-
+              
               <h3>Loops</h3>
               <ul>
                 <li><strong>for</strong>: Execute code a specific number of times</li>
@@ -372,7 +372,7 @@ typeDemo(undefined);   // undefined`,
                 <li><strong>for...of</strong>: Iterate over iterable objects (arrays, strings)</li>
                 <li><strong>for...in</strong>: Iterate over object properties</li>
               </ul>
-
+              
               <h3>Break and Continue</h3>
               <ul>
                 <li><strong>break</strong>: Exit a loop or switch statement</li>
@@ -405,11 +405,11 @@ let day = "Monday";
 switch (day) {
     case "Monday":
         console.log("Start of the week");
-        break;
+    break;
     case "Friday":
         console.log("Weekend is near!");
-        break;
-    default:
+    break;
+  default:
         console.log("Regular day");
 }
 
@@ -430,7 +430,7 @@ for (let i = 0; i < 5; i++) {
 let count = 0;
 while (count < 3) {
     console.log(\`While count: \${count}\`);
-    count++;
+  count++;
 }
 
 // do...while loop
@@ -443,7 +443,7 @@ do {
 // for...of loop (iterables)
 const colors = ["red", "green", "blue"];
 for (const color of colors) {
-    console.log(color);
+  console.log(color);
 }
 
 // for...in loop (object properties)
@@ -3127,227 +3127,6 @@ unsubscribe();`,
                 explanation: 'When destructuring objects, you can provide default values that will be used when the property doesn\'t exist in the source object. Here, b gets the default value of 2 since it\'s not present in obj.'
               }
             ]
-          },
-          {
-            id: 'js-api-integration',
-            title: 'API Integration and Fetch API',
-            duration: 60,
-            content: `
-              <h2>API Integration and Fetch API</h2>
-              <p>Modern web applications heavily rely on APIs for data exchange. This lesson covers how to integrate APIs using JavaScript's native Fetch API and handle various types of HTTP requests and responses.</p>
-
-              <h3>Understanding REST APIs</h3>
-              <ul>
-                <li><strong>HTTP Methods</strong>: GET, POST, PUT, DELETE, PATCH</li>
-                <li><strong>Request Headers</strong>: Content-Type, Authorization</li>
-                <li><strong>Response Status Codes</strong>: 2xx, 3xx, 4xx, 5xx</li>
-                <li><strong>API Endpoints</strong>: RESTful conventions</li>
-              </ul>
-
-              <h3>The Fetch API</h3>
-              <ul>
-                <li><strong>Basic Syntax</strong>: Making simple requests</li>
-                <li><strong>Request Configuration</strong>: Headers, body, mode</li>
-                <li><strong>Response Handling</strong>: JSON, text, blobs</li>
-                <li><strong>Error Handling</strong>: Network errors, HTTP errors</li>
-              </ul>
-
-              <h3>Advanced API Concepts</h3>
-              <ul>
-                <li><strong>Authentication</strong>: Bearer tokens, API keys</li>
-                <li><strong>Rate Limiting</strong>: Handling limits and retries</li>
-                <li><strong>CORS</strong>: Cross-Origin Resource Sharing</li>
-                <li><strong>Caching</strong>: Response caching strategies</li>
-              </ul>
-            `,
-            codeExamples: [
-              {
-                code: \`// Basic Fetch API Usage
-async function fetchUserData(userId) {
-    try {
-        const response = await fetch(\\\`https://api.example.com/users/\${userId}\\\`);
-        
-        if (!response.ok) {
-            throw new Error(\\\`HTTP error! status: \\\${response.status}\\\`);
-        }
-        
-        const userData = await response.json();
-        return userData;
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        throw error;
-    }
-}
-
-// POST Request with Headers
-async function createUser(userData) {
-    try {
-        const response = await fetch('https://api.example.com/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer your-token-here'
-            },
-            body: JSON.stringify(userData)
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || \\\`HTTP error! status: \\\${response.status}\\\`);
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error creating user:', error);
-        throw error;
-    }
-}\`,
-                explanation: 'Basic examples of using the Fetch API for GET and POST requests with proper error handling.'
-              },
-              {
-                code: \`// Advanced API Client
-class APIClient {
-    constructor(baseURL) {
-        this.baseURL = baseURL;
-        this.headers = {
-            'Content-Type': 'application/json'
-        };
-    }
-
-    setAuthToken(token) {
-        this.headers.Authorization = \\\`Bearer \\\${token}\\\`;
-    }
-
-    async request(endpoint, options = {}) {
-        const url = \\\`\\\${this.baseURL}\\\${endpoint}\\\`;
-        const config = {
-            ...options,
-            headers: {
-                ...this.headers,
-                ...options.headers
-            }
-        };
-
-        try {
-            const response = await fetch(url, config);
-            
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || response.statusText);
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error(\\\`API Request Failed: \\\${endpoint}\\\`, error);
-            throw error;
-        }
-    }
-
-    async get(endpoint, params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        const url = queryString ? \\\`\\\${endpoint}?\\\${queryString}\\\` : endpoint;
-        return this.request(url, { method: 'GET' });
-    }
-
-    async post(endpoint, data) {
-        return this.request(endpoint, {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
-    }
-}\`,
-                explanation: 'Advanced API client implementation with authentication and comprehensive error handling.'
-              }
-            ],
-            exercise: 'Create a Weather Dashboard application that integrates with a weather API. The application should fetch weather data, handle various API responses, implement error handling, and display loading states.',
-            solution: \`// Weather Dashboard Implementation
-class WeatherDashboard {
-    constructor(apiKey) {
-        this.apiKey = apiKey;
-        this.baseURL = 'https://api.weatherapi.com/v1';
-    }
-
-    async fetchWeatherData(endpoint, params = {}) {
-        const queryParams = new URLSearchParams({
-            key: this.apiKey,
-            ...params
-        });
-
-        try {
-            const response = await fetch(
-                \\\`\\\${this.baseURL}\\\${endpoint}?\\\${queryParams}\\\`
-            );
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error.message || 'Failed to fetch weather data');
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Weather API Error:', error);
-            throw error;
-        }
-    }
-
-    async getCurrentWeather(location) {
-        return this.fetchWeatherData('/current.json', { q: location });
-    }
-
-    async getForecast(location, days = 5) {
-        return this.fetchWeatherData('/forecast.json', {
-            q: location,
-            days: days
-        });
-    }
-
-    // UI Updates
-    updateCurrentWeather(weatherData) {
-        const current = weatherData.current;
-        const location = weatherData.location;
-        
-        document.querySelector('.location-name').textContent = location.name;
-        document.querySelector('.current-temp').textContent = \\\`\\\${current.temp_c}°C\\\`;
-        document.querySelector('.current-condition').textContent = current.condition.text;
-        document.querySelector('.weather-icon').src = current.condition.icon;
-    }
-
-    handleError(error) {
-        const errorContainer = document.querySelector('.error-container');
-        errorContainer.textContent = error.message;
-        errorContainer.style.display = 'block';
-        
-        setTimeout(() => {
-            errorContainer.style.display = 'none';
-        }, 5000);
-    }
-}\`,
-            quizzes: [
-              {
-                id: 'js-api-q1',
-                question: 'What is the main difference between fetch() and XMLHttpRequest?',
-                options: [
-                  'fetch() is slower than XMLHttpRequest',
-                  'fetch() returns a Promise while XMLHttpRequest uses callbacks',
-                  'XMLHttpRequest is more modern than fetch()',
-                  'fetch() only works with JSON data'
-                ],
-                correctAnswer: 'fetch() returns a Promise while XMLHttpRequest uses callbacks',
-                explanation: 'The fetch() API returns a Promise, making it easier to work with asynchronous operations using async/await syntax, while XMLHttpRequest relies on callback functions and event handlers.'
-              },
-              {
-                id: 'js-api-q2',
-                question: 'When does the fetch() Promise reject?',
-                options: [
-                  'When the server returns a 404 status',
-                  'When there is a network error',
-                  'When the response is not JSON',
-                  'When the request is cancelled'
-                ],
-                correctAnswer: 'When there is a network error',
-                explanation: 'The fetch() Promise only rejects when there is a network error (like no internet connection). HTTP error responses (like 404 or 500) do not cause the Promise to reject - they still resolve normally and must be handled by checking the response.ok property.'
-              }
-            ]
           }
         ]
       }
@@ -3914,7 +3693,7 @@ count = 0
 while count < 5:
     if count == 2:
         count += 1
-        continue  // Skip the rest of this iteration
+        continue  # Skip the rest of this iteration
     print(count)
     count += 1
 
