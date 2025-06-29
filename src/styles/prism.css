@@ -1,0 +1,135 @@
+/* Import Prism.js themes and plugins */
+@import 'prismjs/themes/prism-tomorrow.css';
+@import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+
+/* Override Prism theme colors for better contrast */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #d4d4d4;
+  text-shadow: none;
+  background: none;
+  font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  tab-size: 2;
+  hyphens: none;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6a9955;
+}
+
+.token.punctuation {
+  color: #d4d4d4;
+}
+
+.token.property,
+.token.keyword,
+.token.tag {
+  color: #569cd6;
+}
+
+.token.class-name {
+  color: #4ec9b0;
+}
+
+.token.boolean,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #569cd6;
+}
+
+.token.number {
+  color: #b5cea8;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #ce9178;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #d4d4d4;
+  background: none;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function {
+  color: #dcdcaa;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #d16969;
+}
+
+/* Line numbers styling */
+.line-numbers .line-numbers-rows {
+  border-right: 1px solid #404040;
+  padding: 0 0.5em;
+}
+
+.line-numbers-rows > span:before {
+  color: #858585;
+}
+
+/* Code block container */
+.code-block {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 1rem;
+  background-color: #1e1e1e;
+  overflow-x: auto;
+}
+
+/* Language badge */
+.code-block-language {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: 'Fira Code', monospace;
+  color: #d4d4d4;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+}
+
+/* Scrollbar styling */
+.code-block pre::-webkit-scrollbar {
+  height: 10px;
+  background-color: #1e1e1e;
+}
+
+.code-block pre::-webkit-scrollbar-thumb {
+  background-color: #424242;
+  border-radius: 5px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb:hover {
+  background-color: #525252;
+} 

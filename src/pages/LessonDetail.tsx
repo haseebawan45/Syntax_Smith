@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import curriculumData from '../data/curriculumData';
+import LessonContent from '../components/LessonContent';
 import CodeBlock from '../components/CodeBlock';
 
 interface ScoreResult {
@@ -170,28 +171,7 @@ const LessonDetail: React.FC = () => {
       <div className="mb-12">
         {/* Lesson Content */}
         {activeTab === 'lesson' && (
-          <div>
-            <div 
-              className="prose prose-blue max-w-none mb-8"
-              dangerouslySetInnerHTML={{ __html: lesson.content }}
-            />
-            
-            <h3 className="text-xl font-bold mb-4">Code Examples</h3>
-            <div className="space-y-6">
-              {lesson.codeExamples.map((example, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <div className="bg-gray-800 p-4">
-                    <pre className="text-white overflow-x-auto">
-                      <code>{example.code}</code>
-                    </pre>
-                  </div>
-                  <div className="p-4 bg-gray-50">
-                    <p className="text-gray-700">{example.explanation}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <LessonContent lesson={lesson} />
         )}
 
         {/* Quiz */}

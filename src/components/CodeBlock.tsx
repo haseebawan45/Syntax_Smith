@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-java';
-import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import '../styles/prism.css';
 
 interface CodeBlockProps {
   code: string;
@@ -22,23 +21,18 @@ export default function CodeBlock({ code, language }: CodeBlockProps) {
   }, [code, language]);
 
   return (
-    <div className="relative rounded-lg overflow-hidden">
-      {/* Language badge */}
-      <div className="absolute right-2 top-2 px-2 py-1 text-xs font-mono text-gray-200 bg-gray-700/50 rounded">
+    <div className="code-block">
+      <div className="code-block-language">
         {language}
       </div>
-      
-      {/* Code block */}
-      <div className="bg-[#1e1e1e] p-4">
-        <pre className="overflow-x-auto line-numbers">
-          <code 
-            ref={codeRef} 
-            className={`language-${language} min-w-full inline-block font-mono text-[15px] leading-[1.5]`}
-          >
-            {code.trim()}
-          </code>
-        </pre>
-      </div>
+      <pre className="line-numbers">
+        <code 
+          ref={codeRef} 
+          className={`language-${language}`}
+        >
+          {code.trim()}
+        </code>
+      </pre>
     </div>
   );
 }
