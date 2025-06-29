@@ -3744,28 +3744,150 @@ document.addEventListener('DOMContentLoaded', async () => {
               <h2>JavaScript Modules and Package Management</h2>
               <p>Learn how to organize your JavaScript code using modules and manage dependencies effectively with npm/yarn. This lesson covers modern module systems and best practices for package management.</p>
 
-              <h3>ES Modules (ESM)</h3>
+              <h3>Module Systems in JavaScript</h3>
               <ul>
-                <li><strong>Import/Export Syntax</strong>: Named exports, default exports, and import variations</li>
-                <li><strong>Module Scope</strong>: Understanding module-level encapsulation</li>
-                <li><strong>Dynamic Imports</strong>: Code-splitting and lazy loading</li>
-                <li><strong>Top-level await</strong>: Using await in modules</li>
+                <li><strong>Historical Context</strong>
+                  <ul>
+                    <li>Global scope and script tags</li>
+                    <li>CommonJS (Node.js modules)</li>
+                    <li>AMD (Asynchronous Module Definition)</li>
+                    <li>UMD (Universal Module Definition)</li>
+                    <li>ES Modules (Modern standard)</li>
+                  </ul>
+                </li>
+                <li><strong>ES Modules Features</strong>
+                  <ul>
+                    <li>Static analysis and tree-shaking</li>
+                    <li>Circular dependency handling</li>
+                    <li>Strict mode by default</li>
+                    <li>Live bindings</li>
+                  </ul>
+                </li>
               </ul>
 
-              <h3>Package Management</h3>
+              <h3>ES Modules Syntax</h3>
               <ul>
-                <li><strong>NPM Basics</strong>: package.json, dependencies vs devDependencies</li>
-                <li><strong>Semantic Versioning</strong>: Understanding version numbers and ranges</li>
-                <li><strong>Lock Files</strong>: package-lock.json and yarn.lock</li>
-                <li><strong>Scripts</strong>: NPM scripts for automation</li>
+                <li><strong>Export Types</strong>
+                  <ul>
+                    <li>Named exports (export const/let/function)</li>
+                    <li>Default exports (export default)</li>
+                    <li>Re-exports (export ... from)</li>
+                    <li>Namespace exports (export * from)</li>
+                  </ul>
+                </li>
+                <li><strong>Import Variations</strong>
+                  <ul>
+                    <li>Named imports (import { x })</li>
+                    <li>Default imports (import x)</li>
+                    <li>Namespace imports (import * as x)</li>
+                    <li>Mixed imports (import x, { y })</li>
+                    <li>Side-effect imports (import '')</li>
+                  </ul>
+                </li>
+                <li><strong>Dynamic Imports</strong>
+                  <ul>
+                    <li>import() function</li>
+                    <li>Code splitting</li>
+                    <li>Conditional loading</li>
+                    <li>Performance optimization</li>
+                  </ul>
+                </li>
               </ul>
 
-              <h3>Best Practices</h3>
+              <h3>Package Management with NPM</h3>
               <ul>
-                <li><strong>Dependency Management</strong>: Keeping dependencies up to date and secure</li>
-                <li><strong>Module Organization</strong>: Project structure and import conventions</li>
-                <li><strong>Tree Shaking</strong>: Optimizing bundle size</li>
-                <li><strong>Monorepos</strong>: Managing multiple packages</li>
+                <li><strong>NPM Basics</strong>
+                  <ul>
+                    <li>npm init and package.json</li>
+                    <li>Installing packages (npm install)</li>
+                    <li>Development vs production dependencies</li>
+                    <li>Global vs local installation</li>
+                  </ul>
+                </li>
+                <li><strong>Dependency Management</strong>
+                  <ul>
+                    <li>Semantic Versioning (Major.Minor.Patch)</li>
+                    <li>Version constraints (^, ~, >, >=, etc.)</li>
+                    <li>package-lock.json and deterministic builds</li>
+                    <li>Dependency auditing and security</li>
+                  </ul>
+                </li>
+                <li><strong>NPM Scripts</strong>
+                  <ul>
+                    <li>Pre and post hooks</li>
+                    <li>Custom script commands</li>
+                    <li>Script composition</li>
+                    <li>Environment variables</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h3>Alternative Package Managers</h3>
+              <ul>
+                <li><strong>Yarn</strong>
+                  <ul>
+                    <li>Yarn Classic vs Berry</li>
+                    <li>Workspaces and monorepos</li>
+                    <li>Plug'n'Play loading</li>
+                    <li>Zero-installs</li>
+                  </ul>
+                </li>
+                <li><strong>PNPM</strong>
+                  <ul>
+                    <li>Content-addressable store</li>
+                    <li>Disk space efficiency</li>
+                    <li>Strict dependency resolution</li>
+                    <li>Monorepo support</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h3>Module Bundlers and Build Tools</h3>
+              <ul>
+                <li><strong>Popular Bundlers</strong>
+                  <ul>
+                    <li>Webpack: Configuration and plugins</li>
+                    <li>Rollup: ES module bundling</li>
+                    <li>Vite: Dev server and building</li>
+                    <li>esbuild: Fast JavaScript bundling</li>
+                  </ul>
+                </li>
+                <li><strong>Build Optimization</strong>
+                  <ul>
+                    <li>Tree shaking unused code</li>
+                    <li>Code splitting strategies</li>
+                    <li>Lazy loading modules</li>
+                    <li>Bundle size analysis</li>
+                  </ul>
+                </li>
+              </ul>
+
+              <h3>Best Practices and Patterns</h3>
+              <ul>
+                <li><strong>Module Organization</strong>
+                  <ul>
+                    <li>File naming conventions</li>
+                    <li>Directory structure</li>
+                    <li>Barrel files (index.js)</li>
+                    <li>Module boundaries</li>
+                  </ul>
+                </li>
+                <li><strong>Dependency Management</strong>
+                  <ul>
+                    <li>Keeping dependencies updated</li>
+                    <li>Managing peer dependencies</li>
+                    <li>Avoiding dependency hell</li>
+                    <li>Lock file management</li>
+                  </ul>
+                </li>
+                <li><strong>Security Considerations</strong>
+                  <ul>
+                    <li>Supply chain attacks</li>
+                    <li>Regular security audits</li>
+                    <li>Dependency verification</li>
+                    <li>License compliance</li>
+                  </ul>
+                </li>
               </ul>
             `,
             codeExamples: [
@@ -3781,7 +3903,7 @@ export default class Calculator {
 }
 
 // Importing
-import Calculator, { add, subtract } from './math.js';`,
+import Calculator, { add, subtract } from './math.js`,
                 explanation: 'Example of named exports and default export in ES modules.'
               },
               {
