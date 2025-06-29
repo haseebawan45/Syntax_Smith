@@ -9,107 +9,343 @@ const curriculumData: Course[] = [
     modules: [
       {
         id: 'js-fundamentals',
-        title: 'Beginner Fundamentals',
-        summary: 'Learn the core concepts of JavaScript programming including variables, data types, control flow, and functions.',
+        title: 'JavaScript Fundamentals',
+        summary: 'Build a strong foundation in JavaScript with essential concepts and modern syntax.',
         lessons: [
           {
-            id: 'js-variables',
-            title: 'Variables & Data Types',
+            id: 'js-intro',
+            title: 'Introduction to JavaScript',
             duration: 30,
             content: `
-              <h2>Understanding Variables and Data Types in JavaScript</h2>
-              <p>Variables are containers for storing data values. JavaScript provides several ways to declare variables:</p>
+              <h2>Welcome to JavaScript</h2>
+              <p>JavaScript is a versatile programming language that powers the modern web. Originally created for client-side web development, it has evolved into a powerful language used everywhere: browsers, servers, mobile apps, and more.</p>
+              
+              <h3>Why Learn JavaScript?</h3>
               <ul>
-                <li><code>let</code>: For values that can change</li>
-                <li><code>const</code>: For values that remain constant</li>
-                <li><code>var</code>: The traditional way (not recommended in modern JavaScript)</li>
+                <li>Most popular programming language worldwide</li>
+                <li>Essential for web development</li>
+                <li>Large ecosystem of libraries and frameworks</li>
+                <li>Versatile: front-end, back-end, mobile, and desktop development</li>
+                <li>Active community and extensive resources</li>
               </ul>
-              <p>JavaScript has several data types:</p>
+
+              <h3>JavaScript Environment Setup</h3>
+              <p>To start coding in JavaScript, you need:</p>
               <ul>
-                <li>String: Text values</li>
-                <li>Number: Both integers and floating-point numbers</li>
-                <li>Boolean: true/false values</li>
-                <li>Object: Collections of related data</li>
-                <li>Array: Ordered lists</li>
-                <li>null: Intentional absence of value</li>
-                <li>undefined: Unassigned values</li>
+                <li>A modern web browser (Chrome, Firefox, or Edge)</li>
+                <li>A code editor (VS Code recommended)</li>
+                <li>Basic understanding of HTML and CSS</li>
+              </ul>
+
+              <h3>Running JavaScript Code</h3>
+              <p>There are several ways to run JavaScript code:</p>
+              <ul>
+                <li>Browser Console (Press F12 to open Developer Tools)</li>
+                <li>HTML file with script tags</li>
+                <li>Online code editors (CodePen, JSFiddle)</li>
+                <li>Node.js runtime environment</li>
               </ul>
             `,
             codeExamples: [
               {
-                code: `// Declaring variables
-let name = "John";
-const age = 25;
-let isStudent = true;
+                code: `// Your first JavaScript code
+console.log("Hello, World!");
 
-// Working with different data types
-let score = 95.5;
-let colors = ["red", "green", "blue"];
-let person = {
-  name: "Alice",
-  age: 30,
-  isStudent: false
-};
+// Basic arithmetic
+let sum = 5 + 3;
+console.log("5 + 3 =", sum);
 
-console.log(typeof name);      // "string"
-console.log(typeof age);       // "number"
-console.log(typeof isStudent); // "boolean"`,
-                explanation: 'Examples of declaring variables with different data types and checking their types using typeof operator.'
+// String concatenation
+let name = "JavaScript";
+console.log("Welcome to " + name + "!");
+
+// Modern template literals
+console.log(\`Learning \${name} is fun!\`);`,
+                explanation: 'Basic examples of JavaScript syntax including console output, arithmetic operations, and string manipulation.'
               },
               {
-                code: `// String operations
-let firstName = "John";
-let lastName = "Doe";
-let fullName = firstName + " " + lastName;
+                code: `// Including JavaScript in HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First JavaScript</title>
+</head>
+<body>
+    <h1>Hello JavaScript!</h1>
+    
+    <!-- Internal JavaScript -->
+    <script>
+        console.log("Running JavaScript!");
+    </script>
+    
+    <!-- External JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>`,
+                explanation: 'How to include JavaScript in an HTML file using both internal and external scripts.'
+              },
+              {
+                code: `// Modern JavaScript features
+// Using let and const
+const PI = 3.14159;
+let radius = 5;
 
-// Template literals (modern way)
-let greeting = \`Hello, \${fullName}! You are \${age} years old.\`;
+// Template literals
+let area = \`Circle area: \${PI * radius * radius}\`;
 
-console.log(greeting);`,
-                explanation: 'Working with strings and template literals for string interpolation.'
+// Arrow function
+const greet = (name) => {
+    return \`Hello, \${name}!\`;
+};
+
+console.log(greet("Developer"));`,
+                explanation: 'Examples of modern JavaScript syntax including const/let declarations, template literals, and arrow functions.'
+              }
+            ],
+            exercise: 'Create a simple JavaScript program that calculates and displays your age in days based on your birth year. Use template literals for the output message and console.log() to display the result.',
+            solution: `// Age Calculator Solution
+const currentYear = new Date().getFullYear();
+const birthYear = 1995; // Change this to your birth year
+
+const ageInYears = currentYear - birthYear;
+const ageInDays = ageInYears * 365;
+
+console.log(\`You are approximately \${ageInDays} days old!\`);
+
+// Bonus: More accurate calculation including leap years
+const calculateDays = (birthYear) => {
+    const today = new Date();
+    const birthDate = new Date(birthYear, 0, 1);
+    const diffTime = Math.abs(today - birthDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+};
+
+console.log(\`More precisely, you are \${calculateDays(birthYear)} days old!\`);`,
+            quizzes: [
+              {
+                id: 'js-intro-q1',
+                question: 'Which of the following is NOT a valid way to run JavaScript code?',
+                options: [
+                  'In the browser console',
+                  'In a <javascript> tag in HTML',
+                  'In a <script> tag in HTML',
+                  'Using Node.js'
+                ],
+                correctAnswer: 'In a <javascript> tag in HTML',
+                explanation: 'JavaScript code in HTML must be included in <script> tags, not <javascript> tags. The <javascript> tag does not exist in HTML.'
+              },
+              {
+                id: 'js-intro-q2',
+                question: 'What will be the output of: console.log(`2 + 2 = ${2 + 2}`);',
+                options: [
+                  '2 + 2 = 4',
+                  '2 + 2 = ${2 + 2}',
+                  '2 + 2 = "4"',
+                  'Error'
+                ],
+                correctAnswer: '2 + 2 = 4',
+                explanation: 'Template literals (backticks) allow embedded expressions using ${...}. The expression inside ${} is evaluated and its result is converted to a string.'
+              }
+            ]
+          },
+          {
+            id: 'js-variables',
+            title: 'Variables & Data Types',
+            duration: 45,
+            content: `
+              <h2>Variables and Data Types in JavaScript</h2>
+              <p>Variables are containers for storing data values. JavaScript provides several ways to declare variables and supports various data types to handle different kinds of values.</p>
+
+              <h3>Variable Declaration</h3>
+              <ul>
+                <li><code>let</code>: For values that can change (block-scoped)</li>
+                <li><code>const</code>: For values that remain constant (block-scoped)</li>
+                <li><code>var</code>: Traditional way (function-scoped, not recommended in modern JavaScript)</li>
+              </ul>
+
+              <h3>Primitive Data Types</h3>
+              <ul>
+                <li><strong>Number</strong>: Both integers and floating-point numbers</li>
+                <li><strong>String</strong>: Text values (with single or double quotes, or backticks)</li>
+                <li><strong>Boolean</strong>: true/false values</li>
+                <li><strong>undefined</strong>: Variable declared but not assigned a value</li>
+                <li><strong>null</strong>: Intentional absence of any object value</li>
+                <li><strong>Symbol</strong>: Unique identifier</li>
+                <li><strong>BigInt</strong>: Numbers larger than 2^53 - 1</li>
+              </ul>
+
+              <h3>Reference Types</h3>
+              <ul>
+                <li><strong>Object</strong>: Collections of key-value pairs</li>
+                <li><strong>Array</strong>: Ordered lists of values</li>
+                <li><strong>Function</strong>: Reusable blocks of code</li>
+              </ul>
+
+              <h3>Type Coercion and Conversion</h3>
+              <p>JavaScript is dynamically typed and performs automatic type conversion in certain situations. Understanding type coercion is crucial for avoiding unexpected behavior.</p>
+            `,
+            codeExamples: [
+              {
+                code: `// Variable declarations
+let age = 25;
+const PI = 3.14159;
+var oldWay = "not recommended"; // avoid using var
+
+// Primitive types
+let name = "Alice";           // String
+let score = 95.5;            // Number
+let isStudent = true;        // Boolean
+let certificate = undefined; // undefined
+let experience = null;      // null
+let id = Symbol("id");     // Symbol
+let bigNumber = 9007199254740991n; // BigInt
+
+// Type checking
+console.log(typeof name);      // "string"
+console.log(typeof score);     // "number"
+console.log(typeof isStudent); // "boolean"
+
+// String concatenation vs. number addition
+console.log("5" + "5");     // "55" (string concatenation)
+console.log(5 + 5);         // 10 (number addition)
+console.log("5" + 5);       // "55" (type coercion to string)`,
+                explanation: 'Examples of variable declarations and different data types in JavaScript, including type checking and type coercion.'
+              },
+              {
+                code: `// Reference types
+// Objects
+const person = {
+    name: "Bob",
+    age: 30,
+    isStudent: false,
+    greet: function() {
+        return \`Hello, my name is \${this.name}\`;
+    }
+};
+
+// Arrays
+const colors = ["red", "green", "blue"];
+const mixed = [1, "text", true, null, { x: 10 }];
+
+// Accessing and modifying
+console.log(person.name);        // "Bob"
+console.log(colors[0]);         // "red"
+person.age = 31;               // Modifying object property
+colors.push("yellow");        // Adding to array
+
+// Object and array methods
+console.log(Object.keys(person));    // ["name", "age", "isStudent", "greet"]
+console.log(colors.length);          // 4
+console.log(Array.isArray(colors));  // true`,
+                explanation: 'Working with reference types (objects and arrays) in JavaScript, including property access and built-in methods.'
               },
               {
                 code: `// Type conversion
+// String to Number
 let numStr = "123";
-let num = Number(numStr);    // Convert string to number
-let str = String(num);      // Convert number to string
-let bool = Boolean(num);    // Convert to boolean
+let num1 = Number(numStr);    // Using Number()
+let num2 = +numStr;          // Using unary plus
+let num3 = parseInt(numStr); // Using parseInt()
 
-console.log(num + 7);       // 130
-console.log(str + "7");     // "1237"
-console.log(bool);          // true`,
-                explanation: 'Converting between different data types in JavaScript.'
+// Number to String
+let num = 123;
+let str1 = String(num);     // Using String()
+let str2 = num.toString(); // Using toString()
+let str3 = \`\${num}\`;    // Using template literal
+
+// Boolean conversion
+console.log(Boolean(""));     // false
+console.log(Boolean("0"));    // true
+console.log(Boolean(0));      // false
+console.log(Boolean([]));     // true
+console.log(Boolean(null));   // false
+
+// Type coercion
+console.log(5 + "10");      // "510"
+console.log(5 - "3");       // 2
+console.log("5" == 5);      // true
+console.log("5" === 5);     // false`,
+                explanation: 'Examples of explicit type conversion and implicit type coercion in JavaScript, showing different methods and their results.'
               }
             ],
-            exercise: 'Create variables for a user profile including name, age, email, and a list of hobbies. Use appropriate data types for each piece of information.',
-            solution: `// User Profile Exercise Solution
-const userName = "Sarah Smith";
-const userAge = 28;
-const userEmail = "sarah@example.com";
-const userHobbies = ["reading", "painting", "yoga"];
+            exercise: 'Create a program that takes various inputs (numbers, strings, arrays) and demonstrates type conversion and manipulation. Include examples of both explicit and implicit type conversion.',
+            solution: `// Type Conversion Exercise Solution
+// Function to demonstrate type conversions
+function typeDemo(input) {
+    // Store original type
+    const originalType = typeof input;
+    
+    // Convert to different types
+    const asString = String(input);
+    const asNumber = Number(input);
+    const asBoolean = Boolean(input);
+    
+    // Create result object
+    const result = {
+        original: {
+            value: input,
+            type: originalType
+        },
+        conversions: {
+            string: {
+                value: asString,
+                type: typeof asString
+            },
+            number: {
+                value: asNumber,
+                type: typeof asNumber
+            },
+            boolean: {
+                value: asBoolean,
+                type: typeof asBoolean
+            }
+        }
+    };
+    
+    // Display results
+    console.log("Type Conversion Results:");
+    console.log(\`Original: \${result.original.value} (\${result.original.type})\`);
+    console.log("Conversions:");
+    console.log(\`→ String:  \${result.conversions.string.value}\`);
+    console.log(\`→ Number:  \${result.conversions.number.value}\`);
+    console.log(\`→ Boolean: \${result.conversions.boolean.value}\`);
+    console.log("-------------------");
+}
 
-const userProfile = {
-  name: userName,
-  age: userAge,
-  email: userEmail,
-  hobbies: userHobbies
-};
-
-console.log(userProfile);`,
+// Test with different types
+typeDemo(42);          // number
+typeDemo("123");       // string
+typeDemo(true);        // boolean
+typeDemo([1, 2, 3]);   // object (array)
+typeDemo("");          // empty string
+typeDemo(0);           // zero
+typeDemo(null);        // null
+typeDemo(undefined);   // undefined`,
             quizzes: [
               {
-                id: 'q1-variables',
-                question: 'Which keyword should you use to declare a variable that won\'t be reassigned?',
-                options: ['var', 'let', 'const', 'static'],
-                correctAnswer: 'const',
-                explanation: 'const is used for variables whose values will not change (constants).'
+                id: 'js-var-q1',
+                question: 'What is the output of: typeof null;',
+                options: [
+                  '"null"',
+                  '"undefined"',
+                  '"object"',
+                  '"boolean"'
+                ],
+                correctAnswer: '"object"',
+                explanation: 'In JavaScript, typeof null returns "object". This is a known quirk of the language that has persisted for historical reasons.'
               },
               {
-                id: 'q2-datatypes',
-                question: 'What is the output of: typeof [1, 2, 3]?',
-                options: ['array', 'object', 'list', 'number'],
-                correctAnswer: 'object',
-                explanation: 'In JavaScript, arrays are actually objects, so typeof returns "object" for arrays.'
+                id: 'js-var-q2',
+                question: 'Which of the following is true about const declarations?',
+                options: [
+                  'The value can be changed later',
+                  'The variable must be initialized when declared',
+                  'Arrays declared with const can\'t be modified',
+                  'It is function-scoped'
+                ],
+                correctAnswer: 'The variable must be initialized when declared',
+                explanation: 'const variables must be initialized when declared. While the variable cannot be reassigned, the content of objects and arrays declared with const can still be modified (mutable).'
               }
             ]
           },
@@ -118,111 +354,417 @@ console.log(userProfile);`,
             title: 'Control Flow & Loops',
             duration: 45,
             content: `
-              <h2>Control Flow Structures in JavaScript</h2>
-              <p>Control flow is the order in which statements are executed in a program. JavaScript provides several structures:</p>
+              <h2>Control Flow in JavaScript</h2>
+              <p>Control flow determines how your program executes statements in a particular sequence. JavaScript provides several structures to control program flow.</p>
+
               <h3>Conditional Statements</h3>
               <ul>
-                <li>if...else statements for decision making</li>
-                <li>switch statements for multiple conditions</li>
-                <li>ternary operators for simple conditions</li>
+                <li><strong>if...else</strong>: Make decisions based on conditions</li>
+                <li><strong>switch</strong>: Handle multiple conditions with different cases</li>
+                <li><strong>ternary operator</strong>: Shorthand for simple if...else conditions</li>
               </ul>
+
               <h3>Loops</h3>
               <ul>
-                <li>for loops for counting iterations</li>
-                <li>while loops for condition-based iteration</li>
-                <li>do...while loops for at least one iteration</li>
-                <li>for...of loops for iterating arrays</li>
-                <li>for...in loops for object properties</li>
+                <li><strong>for</strong>: Execute code a specific number of times</li>
+                <li><strong>while</strong>: Execute code while a condition is true</li>
+                <li><strong>do...while</strong>: Execute code at least once, then continue while condition is true</li>
+                <li><strong>for...of</strong>: Iterate over iterable objects (arrays, strings)</li>
+                <li><strong>for...in</strong>: Iterate over object properties</li>
+              </ul>
+
+              <h3>Break and Continue</h3>
+              <ul>
+                <li><strong>break</strong>: Exit a loop or switch statement</li>
+                <li><strong>continue</strong>: Skip to the next iteration of a loop</li>
+              </ul>
+
+              <h3>Error Handling</h3>
+              <ul>
+                <li><strong>try...catch</strong>: Handle potential errors in code</li>
+                <li><strong>throw</strong>: Create custom errors</li>
+                <li><strong>finally</strong>: Execute code after try/catch regardless of outcome</li>
               </ul>
             `,
             codeExamples: [
               {
-                code: `// if...else statements
+                code: `// Conditional Statements
+// if...else
 let temperature = 25;
 
 if (temperature > 30) {
-  console.log("It's hot!");
+    console.log("It's hot!");
 } else if (temperature > 20) {
-  console.log("It's warm.");
+    console.log("It's warm.");
 } else {
-  console.log("It's cool.");
+    console.log("It's cool.");
+}
+
+// switch statement
+let day = "Monday";
+switch (day) {
+    case "Monday":
+        console.log("Start of the week");
+        break;
+    case "Friday":
+        console.log("Weekend is near!");
+        break;
+    default:
+        console.log("Regular day");
 }
 
 // Ternary operator
-let time = 20;
-let greeting = time < 12 ? "Good morning!" : "Good day!";`,
-                explanation: 'Different ways to implement conditional logic in JavaScript.'
+let age = 20;
+let canVote = age >= 18 ? "Yes" : "No";
+console.log(\`Can vote? \${canVote}\`);`,
+                explanation: 'Examples of different conditional statements in JavaScript, including if...else, switch, and the ternary operator.'
               },
               {
-                code: `// for loop
+                code: `// Loops
+// for loop
 for (let i = 0; i < 5; i++) {
-  console.log(\`Iteration \${i + 1}\`);
+    console.log(\`Count: \${i}\`);
 }
 
 // while loop
 let count = 0;
 while (count < 3) {
-  console.log(\`Count: \${count}\`);
-  count++;
+    console.log(\`While count: \${count}\`);
+    count++;
 }
 
-// for...of loop
-const fruits = ["apple", "banana", "orange"];
-for (const fruit of fruits) {
-  console.log(fruit);
+// do...while loop
+let num = 0;
+do {
+    console.log(\`Do-while num: \${num}\`);
+    num++;
+} while (num < 2);
+
+// for...of loop (iterables)
+const colors = ["red", "green", "blue"];
+for (const color of colors) {
+    console.log(color);
+}
+
+// for...in loop (object properties)
+const person = { name: "John", age: 30 };
+for (const prop in person) {
+    console.log(\`\${prop}: \${person[prop]}\`);
 }`,
-                explanation: 'Different types of loops for iteration in JavaScript.'
+                explanation: 'Different types of loops in JavaScript for iteration and working with arrays and objects.'
               },
               {
-                code: `// switch statement
-let day = "Monday";
+                code: `// Error Handling
+// try...catch
+try {
+    // Attempt to access undefined property
+    console.log(nonExistentVariable);
+} catch (error) {
+    console.log("An error occurred:", error.message);
+}
 
-switch (day) {
-  case "Monday":
-    console.log("Start of work week");
-    break;
-  case "Friday":
-    console.log("Weekend is near");
-    break;
-  default:
-    console.log("Regular day");
+// Custom error handling
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error("Division by zero!");
+    }
+    return a / b;
+}
+
+try {
+    console.log(divide(10, 0));
+} catch (error) {
+    console.log("Error:", error.message);
+} finally {
+    console.log("Execution completed");
 }`,
-                explanation: 'Using switch statements for multiple conditions.'
+                explanation: 'Error handling in JavaScript using try...catch blocks and custom error throwing.'
               }
             ],
-            exercise: 'Write a program that prints numbers from 1 to 100. For multiples of 3, print "Fizz" instead of the number, for multiples of 5, print "Buzz", and for numbers that are multiples of both 3 and 5, print "FizzBuzz".',
+            exercise: 'Create the classic FizzBuzz program: Print numbers from 1 to 100. For multiples of 3, print "Fizz". For multiples of 5, print "Buzz". For multiples of both 3 and 5, print "FizzBuzz".',
             solution: `// FizzBuzz Solution
-for (let i = 1; i <= 100; i++) {
-  if (i % 3 === 0 && i % 5 === 0) {
-    console.log("FizzBuzz");
-  } else if (i % 3 === 0) {
-    console.log("Fizz");
-  } else if (i % 5 === 0) {
-    console.log("Buzz");
-  } else {
-    console.log(i);
-  }
+function fizzBuzz() {
+    for (let i = 1; i <= 100; i++) {
+        let output = "";
+        
+        // Check multiples
+        if (i % 3 === 0) output += "Fizz";
+        if (i % 5 === 0) output += "Buzz";
+        
+        // Print the number if not a multiple of 3 or 5
+        console.log(output || i);
+    }
+}
+
+// Run the program
+fizzBuzz();
+
+// Alternative solution using switch
+function fizzBuzzSwitch() {
+    for (let i = 1; i <= 100; i++) {
+        switch (true) {
+            case i % 15 === 0:
+                console.log("FizzBuzz");
+                break;
+            case i % 3 === 0:
+                console.log("Fizz");
+                break;
+            case i % 5 === 0:
+                console.log("Buzz");
+                break;
+            default:
+                console.log(i);
+        }
+    }
 }`,
             quizzes: [
               {
-                id: 'q1-control-flow',
-                question: 'Which loop is guaranteed to execute at least once?',
-                options: ['while loop', 'for loop', 'do...while loop', 'for...in loop'],
-                correctAnswer: 'do...while loop',
-                explanation: 'A do...while loop always executes its block at least once before checking the condition.'
+                id: 'js-control-q1',
+                question: 'What will be the output of: for(let i=0; i<3; i++) { if(i===1) continue; console.log(i); }',
+                options: [
+                  '0, 1, 2',
+                  '0, 2',
+                  '1, 2',
+                  '0, 1'
+                ],
+                correctAnswer: '0, 2',
+                explanation: 'The continue statement skips the rest of the loop body for that iteration. When i is 1, the console.log is skipped.'
               },
               {
-                id: 'q2-control-flow',
-                question: 'What is the output of: 5 > 3 ? "yes" : "no"?',
-                options: ['5', '3', 'yes', 'no'],
-                correctAnswer: 'yes',
-                explanation: 'The ternary operator returns the first value when the condition is true.'
+                id: 'js-control-q2',
+                question: 'Which loop type always executes its code block at least once?',
+                options: [
+                  'for loop',
+                  'while loop',
+                  'do...while loop',
+                  'for...in loop'
+                ],
+                correctAnswer: 'do...while loop',
+                explanation: 'A do...while loop always executes its code block once before checking the condition, unlike other loops that check the condition first.'
+              }
+            ]
+          },
+          {
+            id: 'js-functions',
+            title: 'Functions & Scope',
+            duration: 50,
+            content: `
+              <h2>Functions in JavaScript</h2>
+              <p>Functions are reusable blocks of code that perform specific tasks. They are fundamental building blocks in JavaScript.</p>
+
+              <h3>Function Declarations</h3>
+              <ul>
+                <li><strong>Function Declaration</strong>: Traditional way to define functions</li>
+                <li><strong>Function Expression</strong>: Assigning a function to a variable</li>
+                <li><strong>Arrow Functions</strong>: Concise syntax introduced in ES6</li>
+                <li><strong>IIFE (Immediately Invoked Function Expression)</strong>: Self-executing functions</li>
+              </ul>
+
+              <h3>Function Parameters</h3>
+              <ul>
+                <li>Required parameters</li>
+                <li>Optional parameters with default values</li>
+                <li>Rest parameters (...args)</li>
+                <li>Destructuring parameters</li>
+              </ul>
+
+              <h3>Scope and Closure</h3>
+              <ul>
+                <li><strong>Global Scope</strong>: Variables accessible everywhere</li>
+                <li><strong>Function Scope</strong>: Variables accessible only within functions</li>
+                <li><strong>Block Scope</strong>: Variables accessible only within blocks</li>
+                <li><strong>Closures</strong>: Functions retaining access to their outer scope</li>
+              </ul>
+
+              <h3>Advanced Concepts</h3>
+              <ul>
+                <li><strong>this</strong> keyword and context</li>
+                <li>Call, Apply, and Bind methods</li>
+                <li>Higher-order functions</li>
+                <li>Pure functions and side effects</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// Function Declarations
+// Traditional function declaration
+function greet(name) {
+    return \`Hello, \${name}!\`;
+}
+
+// Function expression
+const sayHello = function(name) {
+    return \`Hello, \${name}!\`;
+};
+
+// Arrow function
+const greetArrow = (name) => \`Hello, \${name}!\`;
+
+// IIFE (Immediately Invoked Function Expression)
+(function() {
+    console.log("I run immediately!");
+})();
+
+// Function with default parameters
+function multiply(a, b = 1) {
+    return a * b;
+}
+
+// Rest parameters
+function sum(...numbers) {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+// Destructuring parameters
+function printUserInfo({ name, age }) {
+    console.log(\`\${name} is \${age} years old\`);
+}`,
+                explanation: 'Different ways to declare and use functions in JavaScript, including modern syntax and parameter handling.'
+              },
+              {
+                code: `// Scope and Closure
+// Global scope
+const globalVar = "I'm global";
+
+function demonstrateScope() {
+    // Function scope
+    const functionVar = "I'm function-scoped";
+    
+    if (true) {
+        // Block scope
+        let blockVar = "I'm block-scoped";
+        var notBlockVar = "I'm function-scoped too";
+        console.log(blockVar); // Accessible
+    }
+    
+    // console.log(blockVar); // Error: blockVar is not defined
+    console.log(notBlockVar); // Accessible
+}
+
+// Closure example
+function createCounter() {
+    let count = 0;
+    
+    return {
+        increment: () => ++count,
+        decrement: () => --count,
+        getCount: () => count
+    };
+}
+
+const counter = createCounter();
+console.log(counter.increment()); // 1
+console.log(counter.increment()); // 2
+console.log(counter.decrement()); // 1`,
+                explanation: 'Examples of scope and closures in JavaScript, showing how variables are accessible in different contexts.'
+              },
+              {
+                code: `// Advanced Function Concepts
+// this keyword and arrow functions
+const person = {
+    name: "John",
+    regularMethod: function() {
+        console.log(this.name);
+    },
+    arrowMethod: () => {
+        console.log(this.name);
+    }
+};
+
+// Higher-order functions
+function multiply(factor) {
+    return function(number) {
+        return number * factor;
+    };
+}
+
+const double = multiply(2);
+console.log(double(5)); // 10
+
+// Pure function
+function addPure(a, b) {
+    return a + b;
+}
+
+// Function with side effect
+let total = 0;
+function addWithSideEffect(a) {
+    total += a; // Side effect: modifying external state
+    return total;
+}`,
+                explanation: 'Advanced function concepts including this context, higher-order functions, and pure functions vs. side effects.'
+              }
+            ],
+            exercise: 'Create a memoization function that caches the results of expensive calculations. Use it to optimize a recursive fibonacci sequence calculator.',
+            solution: `// Memoization Exercise Solution
+function memoize(fn) {
+    const cache = new Map();
+    
+    return function(...args) {
+        const key = JSON.stringify(args);
+        
+        if (cache.has(key)) {
+            console.log('Fetching from cache:', key);
+            return cache.get(key);
+        }
+        
+        const result = fn.apply(this, args);
+        cache.set(key, result);
+        console.log('Calculating result:', key);
+        
+        return result;
+    };
+}
+
+// Recursive fibonacci without memoization
+function fibonacciSlow(n) {
+    if (n <= 1) return n;
+    return fibonacciSlow(n - 1) + fibonacciSlow(n - 2);
+}
+
+// Memoized fibonacci
+const fibonacci = memoize(function(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+});
+
+// Test both implementations
+console.time('Slow');
+console.log(fibonacciSlow(35));
+console.timeEnd('Slow');
+
+console.time('Memoized');
+console.log(fibonacci(35));
+console.timeEnd('Memoized');`,
+            quizzes: [
+              {
+                id: 'js-func-q1',
+                question: 'What is the main difference between function declarations and function expressions?',
+                options: [
+                  'Function declarations are faster',
+                  'Function expressions can be anonymous',
+                  'Function declarations are hoisted',
+                  'Function expressions use less memory'
+                ],
+                correctAnswer: 'Function declarations are hoisted',
+                explanation: 'Function declarations are hoisted to the top of their scope and can be called before their declaration in the code. Function expressions are not hoisted.'
+              },
+              {
+                id: 'js-func-q2',
+                question: 'What will be the output of: const add = (a, b) => a + b; console.log(add(2));',
+                options: [
+                  '2',
+                  'NaN',
+                  'undefined',
+                  'Error'
+                ],
+                correctAnswer: 'NaN',
+                explanation: 'When the second parameter b is not provided, it becomes undefined. Adding a number to undefined results in NaN (Not a Number).'
               }
             ]
           }
         ]
       }
-      // Additional modules would be added here...
     ]
   },
   {
