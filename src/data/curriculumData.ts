@@ -2753,6 +2753,380 @@ validator.validate(formData)
                 explanation: 'console.time() and console.timeEnd() are specifically designed to measure the duration between two points in code execution, making them ideal for performance debugging.'
               }
             ]
+          },
+          {
+            id: 'js-modern',
+            title: 'Modern JavaScript Features (ES6+)',
+            duration: 55,
+            content: `
+              <h2>Modern JavaScript Features</h2>
+              <p>JavaScript has evolved significantly since ES6 (ES2015). Understanding modern JavaScript features is essential for writing clean, efficient, and maintainable code. This lesson covers key features introduced in recent versions of JavaScript.</p>
+
+              <h3>ES6 Fundamentals</h3>
+              <ul>
+                <li><strong>let and const</strong>: Block-scoped declarations</li>
+                <li><strong>Arrow Functions</strong>: Concise function syntax</li>
+                <li><strong>Template Literals</strong>: String interpolation</li>
+                <li><strong>Destructuring</strong>: Array and object unpacking</li>
+              </ul>
+
+              <h3>Enhanced Object Features</h3>
+              <ul>
+                <li><strong>Object Shorthand</strong>: Simplified object literals</li>
+                <li><strong>Computed Properties</strong>: Dynamic property names</li>
+                <li><strong>Spread/Rest Operator</strong>: Object and array manipulation</li>
+                <li><strong>Optional Chaining</strong>: Safe property access</li>
+              </ul>
+
+              <h3>New Data Structures</h3>
+              <ul>
+                <li><strong>Map and Set</strong>: Built-in collections</li>
+                <li><strong>WeakMap and WeakSet</strong>: Memory-efficient collections</li>
+                <li><strong>Symbol</strong>: Unique identifiers</li>
+                <li><strong>BigInt</strong>: Large number handling</li>
+              </ul>
+
+              <h3>Advanced Features</h3>
+              <ul>
+                <li><strong>Iterators and Generators</strong>: Custom iteration</li>
+                <li><strong>Modules</strong>: Code organization</li>
+                <li><strong>Proxy and Reflect</strong>: Meta-programming</li>
+                <li><strong>Nullish Coalescing</strong>: Default value handling</li>
+              </ul>
+            `,
+            codeExamples: [
+              {
+                code: `// ES6 Fundamentals
+// let and const
+let counter = 0;
+const PI = 3.14159;
+
+// Arrow functions
+const add = (a, b) => a + b;
+const multiply = (a, b) => {
+    console.log('Multiplying numbers...');
+    return a * b;
+};
+
+// Template literals
+const name = 'Alice';
+const greeting = \`Hello, \${name}!
+Welcome to Modern JavaScript.
+Your lucky number is: \${Math.random()}\`;
+
+// Destructuring
+const person = { name: 'Bob', age: 30, city: 'New York' };
+const { name: userName, age } = person;
+
+const numbers = [1, 2, 3, 4, 5];
+const [first, second, ...rest] = numbers;
+
+// Parameter destructuring
+function printUserInfo({ name, age, city = 'Unknown' }) {
+    console.log(\`\${name} is \${age} years old from \${city}\`);
+}
+
+// Array destructuring with defaults
+const [x = 1, y = 2] = [];  // x = 1, y = 2`,
+                explanation: 'Core ES6 features including variable declarations, arrow functions, template literals, and destructuring.'
+              },
+              {
+                code: `// Enhanced Object Features
+// Object shorthand
+const x = 10, y = 20;
+const point = { x, y };
+
+// Computed properties
+const propertyName = 'age';
+const user = {
+    name: 'John',
+    [propertyName]: 25,
+    [\`user_\${Date.now()}\`]: 'unique'
+};
+
+// Spread operator
+const defaults = { theme: 'light', language: 'en' };
+const userPreferences = {
+    ...defaults,
+    theme: 'dark'
+};
+
+// Object methods
+const calculator = {
+    add(a, b) {
+        return a + b;
+    },
+    multiply(a, b) {
+        return a * b;
+    }
+};
+
+// Optional chaining
+const response = {
+    data: {
+        user: {
+            address: null
+        }
+    }
+};
+
+const city = response?.data?.user?.address?.city ?? 'Unknown';`,
+                explanation: 'Modern object features including shorthand syntax, computed properties, and safe property access.'
+              },
+              {
+                code: `// New Data Structures
+// Map
+const userMap = new Map();
+userMap.set('user1', { name: 'Alice', role: 'admin' });
+userMap.set('user2', { name: 'Bob', role: 'user' });
+
+// Map iteration
+for (const [key, value] of userMap) {
+    console.log(\`\${key}: \${value.name}\`);
+}
+
+// Set
+const uniqueNumbers = new Set([1, 2, 2, 3, 3, 4]);
+console.log([...uniqueNumbers]); // [1, 2, 3, 4]
+
+// WeakMap and WeakSet
+const weakMap = new WeakMap();
+let obj = { id: 1 };
+weakMap.set(obj, 'metadata');
+obj = null; // Object can be garbage collected
+
+// Symbol
+const uniqueKey = Symbol('description');
+const obj = {
+    [uniqueKey]: 'This is hidden'
+};
+
+// BigInt
+const bigNumber = 9007199254740991n;
+const result = bigNumber + 1n;
+
+// Symbol.iterator
+const range = {
+    from: 1,
+    to: 5,
+    [Symbol.iterator]() {
+        return {
+            current: this.from,
+            last: this.to,
+            next() {
+                if (this.current <= this.last) {
+                    return { done: false, value: this.current++ };
+                } else {
+                    return { done: true };
+                }
+            }
+        };
+    }
+};
+
+for (const num of range) {
+    console.log(num); // 1, 2, 3, 4, 5
+}`,
+                explanation: 'Modern JavaScript data structures and their usage patterns.'
+              }
+            ],
+            exercise: 'Create a modern task management system that demonstrates the use of various ES6+ features. Include functionality for task creation, organization, filtering, and state management using modern JavaScript patterns.',
+            solution: `// Task Management System
+class TaskManager {
+    #tasks = new Map();
+    #listeners = new Set();
+    
+    constructor() {
+        // Initialize with default categories
+        this.categories = new Set(['work', 'personal', 'shopping', 'health']);
+    }
+    
+    // Add a new task
+    addTask({ title, description = '', category = 'personal', dueDate = null }) {
+        const taskId = Symbol(\`task_\${Date.now()}\`);
+        const task = {
+            id: taskId,
+            title,
+            description,
+            category,
+            dueDate,
+            completed: false,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
+        
+        this.#tasks.set(taskId, task);
+        this.#notifyListeners('add', task);
+        return task;
+    }
+    
+    // Update a task
+    updateTask(taskId, updates) {
+        const task = this.#tasks.get(taskId);
+        if (!task) {
+            throw new Error(\`Task \${taskId.description} not found\`);
+        }
+        
+        const updatedTask = {
+            ...task,
+            ...updates,
+            updatedAt: new Date()
+        };
+        
+        this.#tasks.set(taskId, updatedTask);
+        this.#notifyListeners('update', updatedTask);
+        return updatedTask;
+    }
+    
+    // Delete a task
+    deleteTask(taskId) {
+        const task = this.#tasks.get(taskId);
+        if (!task) {
+            throw new Error(\`Task \${taskId.description} not found\`);
+        }
+        
+        this.#tasks.delete(taskId);
+        this.#notifyListeners('delete', task);
+    }
+    
+    // Toggle task completion
+    toggleTask(taskId) {
+        const task = this.#tasks.get(taskId);
+        if (!task) {
+            throw new Error(\`Task \${taskId.description} not found\`);
+        }
+        
+        return this.updateTask(taskId, {
+            completed: !task.completed
+        });
+    }
+    
+    // Get tasks with filtering
+    getTasks({ category = null, completed = null, searchText = '' } = {}) {
+        return [...this.#tasks.values()].filter(task => {
+            const matchesCategory = category ? task.category === category : true;
+            const matchesStatus = completed !== null ? task.completed === completed : true;
+            const matchesSearch = searchText
+                ? task.title.toLowerCase().includes(searchText.toLowerCase()) ||
+                  task.description.toLowerCase().includes(searchText.toLowerCase())
+                : true;
+            
+            return matchesCategory && matchesStatus && matchesSearch;
+        });
+    }
+    
+    // Get task statistics
+    getStats() {
+        const tasks = [...this.#tasks.values()];
+        return {
+            total: tasks.length,
+            completed: tasks.filter(t => t.completed).length,
+            categoryCounts: tasks.reduce((counts, task) => {
+                counts[task.category] = (counts[task.category] || 0) + 1;
+                return counts;
+            }, {}),
+            upcomingTasks: tasks.filter(task => {
+                if (!task.dueDate || task.completed) return false;
+                const dueDate = new Date(task.dueDate);
+                const today = new Date();
+                return dueDate >= today;
+            }).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+        };
+    }
+    
+    // Subscribe to changes
+    subscribe(listener) {
+        this.#listeners.add(listener);
+        return () => this.#listeners.delete(listener);
+    }
+    
+    // Notify all listeners
+    #notifyListeners(action, task) {
+        for (const listener of this.#listeners) {
+            listener({ action, task });
+        }
+    }
+    
+    // Iterator for tasks
+    *[Symbol.iterator]() {
+        for (const task of this.#tasks.values()) {
+            yield task;
+        }
+    }
+}
+
+// Example usage
+const taskManager = new TaskManager();
+
+// Add some tasks
+const task1 = taskManager.addTask({
+    title: 'Complete JavaScript tutorial',
+    category: 'work',
+    description: 'Learn modern JavaScript features',
+    dueDate: '2024-03-20'
+});
+
+const task2 = taskManager.addTask({
+    title: 'Grocery shopping',
+    category: 'shopping',
+    description: 'Buy fruits and vegetables'
+});
+
+// Subscribe to changes
+const unsubscribe = taskManager.subscribe(({ action, task }) => {
+    console.log(\`Task \${action}d:, \${task.title}\`);
+});
+
+// Update a task
+taskManager.updateTask(task1.id, {
+    description: 'Learn modern JavaScript features and practice examples'
+});
+
+// Toggle completion
+taskManager.toggleTask(task2.id);
+
+// Filter tasks
+const workTasks = taskManager.getTasks({ category: 'work' });
+const completedTasks = taskManager.getTasks({ completed: true });
+const searchResults = taskManager.getTasks({ searchText: 'javascript' });
+
+// Get statistics
+const stats = taskManager.getStats();
+console.log('Task Statistics:', stats);
+
+// Iterate over tasks
+for (const task of taskManager) {
+    console.log(\`Task: \${task.title} (\${task.completed ? 'Completed' : 'Pending'})\`);
+}
+
+// Cleanup
+unsubscribe();`,
+            quizzes: [
+              {
+                id: 'js-modern-q1',
+                question: 'What is the main difference between let and var declarations?',
+                options: [
+                  'let is faster than var',
+                  'var is block-scoped while let is function-scoped',
+                  'let is block-scoped while var is function-scoped',
+                  'There is no difference'
+                ],
+                correctAnswer: 'let is block-scoped while var is function-scoped',
+                explanation: 'let declarations are block-scoped, meaning they are only accessible within the block they are declared in, while var declarations are function-scoped and can be accessed throughout the function.'
+              },
+              {
+                id: 'js-modern-q2',
+                question: 'What is the output of: const obj = { a: 1 }; const { a, b = 2 } = obj;',
+                options: [
+                  'a = 1, b = undefined',
+                  'a = 1, b = 2',
+                  'Error: b is not defined',
+                  'a = 1, b = null'
+                ],
+                correctAnswer: 'a = 1, b = 2',
+                explanation: 'When destructuring objects, you can provide default values that will be used when the property doesn\'t exist in the source object. Here, b gets the default value of 2 since it\'s not present in obj.'
+              }
+            ]
           }
         ]
       }
