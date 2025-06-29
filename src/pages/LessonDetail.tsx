@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import curriculumData from '../data/curriculumData';
+import CodeBlock from '../components/CodeBlock';
 
 interface ScoreResult {
   correct: number;
@@ -16,6 +17,14 @@ const LessonDetail: React.FC = () => {
   const [selectedQuizIndex, setSelectedQuizIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [showResults, setShowResults] = useState(false);
+
+  // Helper function to determine code language based on lesson ID
+  const getLanguage = (lessonId: string): string => {
+    if (lessonId.startsWith('js-')) return 'javascript';
+    if (lessonId.startsWith('py-')) return 'python';
+    if (lessonId.startsWith('java-')) return 'java';
+    return 'javascript'; // default
+  };
 
   // Find the course, module and lesson
   const course = curriculumData.find((c) => c.id === courseId);
@@ -317,15 +326,16 @@ const LessonDetail: React.FC = () => {
                 
                 <h3 className="font-medium mb-2">Success Criteria</h3>
                 <ul className="list-disc pl-5 space-y-1 text-gray-700 mb-6">
-                  {lesson.challenge.successCriteria.map((criteria, index) => (
+                  {lesson.challenge.successCriteria.map((criteria: string, index: number) => (
                     <li key={index}>{criteria}</li>
                   ))}
                 </ul>
               </div>
               <div className="bg-gray-800 p-4">
-                <pre className="text-white overflow-x-auto">
-                  <code>{lesson.challenge.starterCode}</code>
-                </pre>
+                <CodeBlock 
+                  code={lesson.challenge.starterCode}
+                  language={getLanguage(lesson.id)}
+                />
               </div>
             </div>
           </div>

@@ -11,6 +11,13 @@ export interface Quiz {
   explanation: string;
 }
 
+export interface Challenge {
+  title: string;
+  description: string;
+  successCriteria: string[];
+  starterCode: string;
+}
+
 export interface Lesson {
   id: string;
   title: string;
@@ -20,6 +27,7 @@ export interface Lesson {
   exercise: string;
   solution: string;
   quizzes: Quiz[];
+  challenge?: Challenge;
 }
 
 export interface Module {
