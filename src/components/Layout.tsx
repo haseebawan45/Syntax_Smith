@@ -55,6 +55,14 @@ const Layout: React.FC = () => {
                   Courses
                 </Link>
               </li>
+              <li>
+                <Link 
+                  to="/playground" 
+                  className={`font-medium text-lg ${isActive('/playground') ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-700 hover:text-primary-600'} transition`}
+                >
+                  Playground
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
@@ -79,6 +87,15 @@ const Layout: React.FC = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Courses
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/playground" 
+                  className={`block py-3 px-4 ${isActive('/playground') ? 'text-primary-600 bg-primary-50' : 'text-gray-700 hover:bg-gray-50'}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Playground
                 </Link>
               </li>
             </ul>
@@ -123,6 +140,14 @@ const Layout: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                     Courses
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/playground" className="text-gray-400 hover:text-white transition flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    Playground
                   </Link>
                 </li>
               </ul>
