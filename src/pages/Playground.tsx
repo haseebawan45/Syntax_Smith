@@ -132,7 +132,7 @@ const Playground: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 relative z-0">
       <div className="text-center mb-12">
         <div className="inline-block">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 bg-clip-text text-transparent animate-gradient-x">
@@ -147,7 +147,7 @@ const Playground: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Code Editor - Takes up 2/3 of the space */}
-        <div className={`lg:col-span-2 rounded-xl shadow-2xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} backdrop-blur-lg backdrop-filter`}>
+        <div className={`lg:col-span-2 rounded-xl shadow-2xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} backdrop-blur-lg backdrop-filter relative z-0`}>
           <div className="flex items-center justify-between p-4 border-b border-gray-700/50 bg-opacity-90">
             <div className="flex items-center gap-2">
               <div className="flex gap-2">
@@ -196,9 +196,9 @@ const Playground: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative" style={{ height: '600px' }}>
+          <div className="h-[500px]">
             <Editor
-              height="600px"
+              height="100%"
               defaultLanguage="javascript"
               language={language}
               value={code}
@@ -271,7 +271,7 @@ const Playground: React.FC = () => {
               Output
             </h2>
           </div>
-          <div className="p-6" style={{ height: '600px', overflowY: 'auto' }}>
+          <div className="p-6 h-[500px] overflow-y-auto">
             <pre className={`font-mono text-sm whitespace-pre-wrap ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
               {output || 'Your code output will appear here...'}
             </pre>
