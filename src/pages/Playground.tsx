@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import type { WheelEvent } from 'react';
 import Editor from '@monaco-editor/react';
 import type { OnMount } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
@@ -40,6 +41,7 @@ const Playground: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Handle language change
   useEffect(() => {
@@ -48,6 +50,28 @@ const Playground: React.FC = () => {
 
   const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
+  };
+
+  // Handle wheel events to allow page scrolling
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    // If the editor is scrolled to the top and trying to scroll up, or
+    // scrolled to the bottom and trying to scroll down, allow the event to propagate
+    if (editorRef.current) {
+      const editorScrollTop = editorRef.current.getScrollTop();
+      const editorScrollHeight = editorRef.current.getScrollHeight();
+      const editorHeight = editorRef.current.getLayoutInfo().height;
+      
+      const isAtTop = editorScrollTop <= 0;
+      const isAtBottom = editorScrollTop + editorHeight >= editorScrollHeight;
+      
+      if ((isAtTop && e.deltaY < 0) || (isAtBottom && e.deltaY > 0)) {
+        // Allow page to scroll
+        return;
+      } else {
+        // Prevent page from scrolling
+        e.stopPropagation();
+      }
+    }
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -132,7 +156,7 @@ const Playground: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 relative z-0">
+    <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
         <div className="inline-block">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 bg-clip-text text-transparent animate-gradient-x">
@@ -147,122 +171,139 @@ const Playground: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Code Editor - Takes up 2/3 of the space */}
-        <div className={`lg:col-span-2 rounded-xl shadow-2xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} backdrop-blur-lg backdrop-filter relative z-0`}>
-          <div className="flex items-center justify-between p-4 border-b border-gray-700/50 bg-opacity-90">
-            <div className="flex items-center gap-2">
-              <div className="flex gap-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+        <div className="lg:col-span-2">
+          <div className={`rounded-xl shadow-2xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+            <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
+              <div className="flex items-center gap-2">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <select 
+                  value={language}
+                  onChange={handleLanguageChange}
+                  className={`
+                    px-4 py-2 rounded-lg font-medium text-sm transition-all
+                    ${isDarkMode 
+                      ? 'bg-gray-800 text-white border-gray-700' 
+                      : 'bg-white text-gray-800 border-gray-200'
+                    } border focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                  `}
+                >
+                  {languageOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.icon} {option.label}
+                    </option>
+                  ))}
+                </select>
+                <button 
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  className={`p-2 rounded-lg transition-all ${
+                    isDarkMode 
+                      ? 'text-gray-400 hover:text-white hover:bg-gray-800' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  {isDarkMode ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <select 
-                value={language}
-                onChange={handleLanguageChange}
+            <div 
+              ref={containerRef}
+              onWheel={handleWheel}
+              style={{ height: "350px", maxHeight: "350px" }}
+              className="editor-container"
+            >
+              <Editor
+                height="350px"
+                defaultLanguage="javascript"
+                language={language}
+                value={code}
+                onChange={(value) => setCode(value || '')}
+                theme={isDarkMode ? 'vs-dark' : 'light'}
+                options={{
+                  fontSize: 14,
+                  fontFamily: 'Fira Code, monospace',
+                  minimap: { enabled: false },
+                  scrollBeyondLastLine: false,
+                  automaticLayout: true,
+                  tabSize: 2,
+                  wordWrap: 'on',
+                  suggestOnTriggerCharacters: true,
+                  quickSuggestions: true,
+                  snippetSuggestions: 'inline',
+                  formatOnType: true,
+                  formatOnPaste: true,
+                  scrollbar: {
+                    useShadows: false,
+                    verticalHasArrows: true,
+                    horizontalHasArrows: true,
+                    vertical: 'visible',
+                    horizontal: 'visible',
+                    verticalScrollbarSize: 12,
+                    horizontalScrollbarSize: 12,
+                    alwaysConsumeMouseWheel: false
+                  }
+                }}
+                onMount={handleEditorDidMount}
+                loading={
+                  <div className="flex items-center justify-center h-full">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+                  </div>
+                }
+              />
+            </div>
+
+            <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'} flex justify-end`}>
+              <button
+                onClick={executeCode}
+                disabled={isRunning}
                 className={`
-                  px-4 py-2 rounded-lg font-medium text-sm transition-all
-                  ${isDarkMode 
-                    ? 'bg-gray-800 text-white border-gray-700' 
-                    : 'bg-white text-gray-800 border-gray-200'
-                  } border focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                  px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-all
+                  ${isRunning 
+                    ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
+                    : 'bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white transform hover:scale-105'
+                  }
+                  shadow-lg hover:shadow-xl
                 `}
               >
-                {languageOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.icon} {option.label}
-                  </option>
-                ))}
-              </select>
-              <button 
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className={`p-2 rounded-lg transition-all ${
-                  isDarkMode 
-                    ? 'text-gray-400 hover:text-white hover:bg-gray-800' 
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                {isDarkMode ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
+                {isRunning ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Running...
+                  </>
                 ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                  </svg>
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Run Code
+                  </>
                 )}
               </button>
             </div>
           </div>
-
-          <div className="h-[500px]">
-            <Editor
-              height="100%"
-              defaultLanguage="javascript"
-              language={language}
-              value={code}
-              onChange={(value) => setCode(value || '')}
-              theme={isDarkMode ? 'vs-dark' : 'light'}
-              options={{
-                fontSize: 14,
-                fontFamily: 'Fira Code, monospace',
-                minimap: { enabled: false },
-                scrollBeyondLastLine: false,
-                automaticLayout: true,
-                tabSize: 2,
-                wordWrap: 'on',
-                suggestOnTriggerCharacters: true,
-                quickSuggestions: true,
-                snippetSuggestions: 'inline',
-                formatOnType: true,
-                formatOnPaste: true,
-              }}
-              onMount={handleEditorDidMount}
-              loading={
-                <div className="flex items-center justify-center h-full">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-                </div>
-              }
-            />
-          </div>
-
-          <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'} flex justify-end bg-opacity-90`}>
-            <button
-              onClick={executeCode}
-              disabled={isRunning}
-              className={`
-                px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-all
-                ${isRunning 
-                  ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
-                  : 'bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white transform hover:scale-105'
-                }
-                shadow-lg hover:shadow-xl
-              `}
-            >
-              {isRunning ? (
-                <>
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Running...
-                </>
-              ) : (
-                <>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Run Code
-                </>
-              )}
-            </button>
-          </div>
         </div>
 
         {/* Output panel - Takes up 1/3 of the space */}
-        <div className={`rounded-xl shadow-xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} backdrop-blur-lg backdrop-filter`}>
+        <div className={`rounded-xl shadow-xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
           <div className={`p-4 ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100'} border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
             <h2 className={`font-semibold flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -271,7 +312,7 @@ const Playground: React.FC = () => {
               Output
             </h2>
           </div>
-          <div className="p-6 h-[500px] overflow-y-auto">
+          <div className="p-6" style={{ height: "350px", maxHeight: "350px", overflowY: "auto" }}>
             <pre className={`font-mono text-sm whitespace-pre-wrap ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
               {output || 'Your code output will appear here...'}
             </pre>
@@ -279,7 +320,7 @@ const Playground: React.FC = () => {
         </div>
       </div>
 
-      <div className={`mt-12 rounded-xl p-8 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} backdrop-blur-lg backdrop-filter`}>
+      <div className={`mt-12 rounded-xl p-8 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
         <div className="flex items-center gap-3 mb-6">
           <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
