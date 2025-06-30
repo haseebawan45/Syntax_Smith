@@ -153,8 +153,9 @@ const Playground: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className={`rounded-xl shadow-2xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} backdrop-blur-lg backdrop-filter`}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Code Editor - Takes up 2/3 of the space */}
+        <div className={`lg:col-span-2 rounded-xl shadow-2xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} backdrop-blur-lg backdrop-filter`}>
           <div className="flex items-center justify-between p-4 border-b border-gray-700/50 bg-opacity-90">
             <div className="flex items-center gap-2">
               <div className="flex gap-2">
@@ -208,18 +209,27 @@ const Playground: React.FC = () => {
               ref={editorRef}
               value={code}
               onChange={handleCodeChange}
-              className={`absolute inset-0 w-full h-full p-6 font-mono text-base leading-normal resize-none outline-none opacity-0`}
+              className={`w-full h-full p-6 font-mono text-base leading-normal resize-none ${
+                isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-white text-gray-800'
+              } focus:outline-none focus:ring-0`}
               style={{
-                minHeight: '400px',
+                minHeight: '600px',
+                maxHeight: '600px',
+                overflowY: 'auto',
+                tabSize: 2,
               }}
               spellCheck="false"
             />
             <pre 
               ref={previewRef}
-              className={`!m-0 p-6 font-mono text-base leading-normal ${
+              className={`absolute top-0 left-0 w-full h-full p-6 font-mono text-base leading-normal pointer-events-none ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-800'
               }`}
-              style={{ minHeight: '400px' }}
+              style={{
+                minHeight: '600px',
+                maxHeight: '600px',
+                overflow: 'hidden',
+              }}
             >
               <code className={`language-${language}`}>
                 {code}
@@ -261,7 +271,7 @@ const Playground: React.FC = () => {
           </div>
         </div>
 
-        {/* Output panel */}
+        {/* Output panel - Takes up 1/3 of the space */}
         <div className={`rounded-xl shadow-xl overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-white'} backdrop-blur-lg backdrop-filter`}>
           <div className={`p-4 ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100'} border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
             <h2 className={`font-semibold flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
@@ -271,7 +281,7 @@ const Playground: React.FC = () => {
               Output
             </h2>
           </div>
-          <div className="p-6" style={{ minHeight: '400px' }}>
+          <div className="p-6" style={{ height: '600px', overflowY: 'auto' }}>
             <pre className={`font-mono text-sm whitespace-pre-wrap ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
               {output || 'Your code output will appear here...'}
             </pre>
