@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-java';
-import 'prismjs/plugins/line-numbers/prism-line-numbers';
-import 'prismjs/themes/prism-tomorrow.css';
+import Editor from '@monaco-editor/react';
+import type { OnMount } from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
 
 const languageOptions = [
   { value: 'javascript', label: 'JavaScript', icon: '⚡' },
@@ -42,35 +39,30 @@ const Playground: React.FC = () => {
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const editorRef = useRef<HTMLTextAreaElement>(null);
-  const previewRef = useRef<HTMLPreElement>(null);
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   // Handle language change
   useEffect(() => {
     setCode(defaultCode[language as keyof typeof defaultCode]);
   }, [language]);
 
-  // Highlight code on change
-  useEffect(() => {
-    if (previewRef.current) {
-      Prism.highlightElement(previewRef.current);
-    }
-  }, [code, language]);
-
-  // Update textarea height to match content
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.style.height = 'auto';
-      editorRef.current.style.height = `${editorRef.current.scrollHeight}px`;
-    }
-  }, [code]);
-
-  const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCode(e.target.value);
+  const handleEditorDidMount: OnMount = (editor) => {
+    editorRef.current = editor;
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLanguage(e.target.value);
+    const newLang = e.target.value;
+    setLanguage(newLang);
+    // Map language values to Monaco language IDs
+    const monacoLang = newLang === 'javascript' ? 'javascript' : 
+                      newLang === 'python' ? 'python' : 
+                      'java';
+    if (editorRef.current) {
+      const model = editorRef.current.getModel();
+      if (model) {
+        monaco.editor.setModelLanguage(model, monacoLang);
+      }
+    }
   };
 
   const executeCode = () => {
@@ -204,37 +196,35 @@ const Playground: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative">
-            <textarea
-              ref={editorRef}
+          <div className="relative" style={{ height: '600px' }}>
+            <Editor
+              height="600px"
+              defaultLanguage="javascript"
+              language={language}
               value={code}
-              onChange={handleCodeChange}
-              className={`w-full h-full p-6 font-mono text-base leading-normal resize-none ${
-                isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-white text-gray-800'
-              } focus:outline-none focus:ring-0`}
-              style={{
-                minHeight: '600px',
-                maxHeight: '600px',
-                overflowY: 'auto',
+              onChange={(value) => setCode(value || '')}
+              theme={isDarkMode ? 'vs-dark' : 'light'}
+              options={{
+                fontSize: 14,
+                fontFamily: 'Fira Code, monospace',
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                automaticLayout: true,
                 tabSize: 2,
+                wordWrap: 'on',
+                suggestOnTriggerCharacters: true,
+                quickSuggestions: true,
+                snippetSuggestions: 'inline',
+                formatOnType: true,
+                formatOnPaste: true,
               }}
-              spellCheck="false"
+              onMount={handleEditorDidMount}
+              loading={
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+                </div>
+              }
             />
-            <pre 
-              ref={previewRef}
-              className={`absolute top-0 left-0 w-full h-full p-6 font-mono text-base leading-normal pointer-events-none ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-800'
-              }`}
-              style={{
-                minHeight: '600px',
-                maxHeight: '600px',
-                overflow: 'hidden',
-              }}
-            >
-              <code className={`language-${language}`}>
-                {code}
-              </code>
-            </pre>
           </div>
 
           <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'} flex justify-end bg-opacity-90`}>
@@ -305,7 +295,7 @@ const Playground: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
-            Switch between programming languages using the dropdown above the editor
+            Press Ctrl+Space for code suggestions
           </li>
           <li className="flex items-start gap-3">
             <div className="mt-1 h-5 w-5 text-primary-500">
