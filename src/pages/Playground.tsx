@@ -320,49 +320,122 @@ const Playground: React.FC = () => {
         </div>
       </div>
 
-      <div className={`mt-12 rounded-xl p-8 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+      <div className={`mt-12 rounded-xl overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'} shadow-lg`}>
+        <div className={`p-6 ${isDarkMode ? 'bg-gradient-to-r from-primary-900/50 to-secondary-900/50' : 'bg-gradient-to-r from-primary-100 to-secondary-100'}`}>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="h-10 w-10 rounded-lg bg-gradient-to-r from-primary-600 to-secondary-600 flex items-center justify-center shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h2 className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Tips & Tricks</h2>
           </div>
-          <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Tips & Tricks</h2>
+          <p className={`ml-13 pl-1 mb-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Enhance your coding experience with these helpful tips
+          </p>
         </div>
-        <ul className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-          <li className="flex items-start gap-3">
-            <div className="mt-1 h-5 w-5 text-primary-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+        
+        <div className="p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Tip 1 */}
+            <div className={`p-6 rounded-xl ${isDarkMode 
+              ? 'bg-gray-900/50 hover:bg-gray-900 border border-gray-800' 
+              : 'bg-white hover:bg-gray-50 border border-gray-100'} 
+              transition-all duration-300 shadow-md hover:shadow-lg`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-primary-900/50' : 'bg-primary-50'}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    Code Completion
+                  </h3>
+                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Press <span className={`px-2 py-0.5 rounded font-mono text-sm ${isDarkMode ? 'bg-gray-800 text-primary-400' : 'bg-gray-100 text-primary-600'}`}>Ctrl+Space</span> to trigger code suggestions and autocomplete
+                  </p>
+                </div>
+              </div>
             </div>
-            Press Ctrl+Space for code suggestions
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="mt-1 h-5 w-5 text-primary-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+
+            {/* Tip 2 */}
+            <div className={`p-6 rounded-xl ${isDarkMode 
+              ? 'bg-gray-900/50 hover:bg-gray-900 border border-gray-800' 
+              : 'bg-white hover:bg-gray-50 border border-gray-100'} 
+              transition-all duration-300 shadow-md hover:shadow-lg`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-secondary-900/50' : 'bg-secondary-50'}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    Theme Toggle
+                  </h3>
+                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Switch between light and dark themes with the theme button in the editor toolbar
+                  </p>
+                </div>
+              </div>
             </div>
-            Toggle between light and dark themes with the theme button
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="mt-1 h-5 w-5 text-primary-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+
+            {/* Tip 3 */}
+            <div className={`p-6 rounded-xl ${isDarkMode 
+              ? 'bg-gray-900/50 hover:bg-gray-900 border border-gray-800' 
+              : 'bg-white hover:bg-gray-50 border border-gray-100'} 
+              transition-all duration-300 shadow-md hover:shadow-lg`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-primary-900/50' : 'bg-primary-50'}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    Console Output
+                  </h3>
+                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    For JavaScript, use <span className={`px-2 py-0.5 rounded font-mono text-sm ${isDarkMode ? 'bg-gray-800 text-primary-400' : 'bg-gray-100 text-primary-600'}`}>console.log()</span> to see output in the results panel
+                  </p>
+                </div>
+              </div>
             </div>
-            For JavaScript code, use <code className={`px-2 py-0.5 rounded ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>console.log()</code> to see output
-          </li>
-          <li className="flex items-start gap-3">
-            <div className="mt-1 h-5 w-5 text-primary-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+
+            {/* Tip 4 */}
+            <div className={`p-6 rounded-xl ${isDarkMode 
+              ? 'bg-gray-900/50 hover:bg-gray-900 border border-gray-800' 
+              : 'bg-white hover:bg-gray-50 border border-gray-100'} 
+              transition-all duration-300 shadow-md hover:shadow-lg`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`p-3 rounded-lg ${isDarkMode ? 'bg-secondary-900/50' : 'bg-secondary-50'}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    Multiple Languages
+                  </h3>
+                  <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Switch between JavaScript, Python, and Java using the language dropdown
+                  </p>
+                </div>
+              </div>
             </div>
-            Try experimenting with different algorithms or code snippets!
-          </li>
-        </ul>
+          </div>
+
+          <div className={`mt-8 p-4 rounded-lg text-center ${isDarkMode ? 'bg-gray-900/50 text-gray-400' : 'bg-gray-100 text-gray-600'}`}>
+            <p>
+              <span className="font-semibold">Pro Tip:</span> Try experimenting with different algorithms and code snippets to improve your coding skills!
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
