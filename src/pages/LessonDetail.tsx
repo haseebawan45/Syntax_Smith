@@ -15,7 +15,6 @@ const LessonDetail: React.FC = () => {
   const navigate = useNavigate();
   
   const [activeTab, setActiveTab] = useState<'lesson' | 'quiz' | 'challenge'>('lesson');
-  const [selectedQuizIndex, setSelectedQuizIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [showResults, setShowResults] = useState(false);
 
@@ -49,7 +48,6 @@ const LessonDetail: React.FC = () => {
   // Reset state when lesson changes
   useEffect(() => {
     setActiveTab('lesson');
-    setSelectedQuizIndex(0);
     setUserAnswers({});
     setShowResults(false);
   }, [lessonId]);
@@ -349,4 +347,4 @@ const LessonDetail: React.FC = () => {
   );
 };
 
-export default LessonDetail; 
+export default LessonDetail;

@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import type { WheelEvent } from 'react';
 import Editor from '@monaco-editor/react';
 import type { OnMount } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
